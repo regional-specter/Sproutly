@@ -1,4 +1,4 @@
-# Sproutly
+# 🪴 Sproutly
 
 Plant enthusiasts love taking cuttings and growing new plants, the user takes a photo of a sick leaf or a new propagation cutting & app identifies the specific plant species, assesses the health/root development, and generates a personalized watering, misting, or repotting schedule
 

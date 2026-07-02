@@ -6,9 +6,13 @@ Plant enthusiasts love taking cuttings and growing new plants, the user takes a 
 
 - Frontend - Built using TailwindCSS and React for faster development and implementation from the initial Figma design files. The application UI must be very user-friendly and high quality design, taking inspiration from Pinterest and other sites. Build a very simple yet effective landing page for marketing
 - Backend - Comprised of the AI API route which takes in the plant image and returns the key information regarding the plant and it’s health status. User must be able to add their plants currently under care or in house into their virtual garden
+
 ✅ Plant Name, Key Facts and Information
+
 ✅ Plant Health Status from Image Detection and Analysis
+
 ✅ Logs the new or updated status of the plant
+
 ✅ Adds a reminder log for plant if required
 - AI & Database - Supabase is sufficient for storing all the required material and user profile information for any future references and AI Usage. Gemini API should be more than sufficient for visual analysis from plant images
 

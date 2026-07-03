@@ -1,7 +1,28 @@
 :root {
-  --font-display:
-    Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol, Noto Color Emoji;
+  /* Sproutly brand colours */
+  --color-primary: #489e4b;
+  --color-secondary: #377c4d;
+  --color-surface: #f9f9fb;
+  --color-icon: #222222;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-text-muted: #9ca3af;
+
+  /* Typography — Inter */
+  --font-inter-medium: 'Inter Medium', Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-inter-semibold: 'Inter SemiBold', Inter, ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography — Gabarito (analysis page widget) */
+  --font-gabarito-medium: 'Gabarito Medium', Gabarito, ui-sans-serif, system-ui, sans-serif;
+  --font-gabarito-semibold: 'Gabarito SemiBold', Gabarito, ui-sans-serif, system-ui, sans-serif;
+
+  /* Letter spacing */
+  --letter-spacing-body: -0.5px;
+  --letter-spacing-heading-sm: -1.5px;
+  --letter-spacing-heading-lg: -3px;
+
+  /* Legacy fallbacks */
+  --font-display: var(--font-inter-medium);
   --font-mono:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
   --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;

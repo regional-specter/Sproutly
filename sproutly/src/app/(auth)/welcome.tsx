@@ -1,19 +1,48 @@
 import { Image } from 'expo-image';
 import { type Href, useRouter } from 'expo-router';
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthButton } from '@/components/sproutly/auth-button';
 import { GradientBackground } from '@/components/sproutly/gradient-background';
 import { SproutlyLogo } from '@/components/sproutly/sproutly-logo';
+import { useAuth } from '@/contexts/auth-context';
+import { signInWithGoogle } from '@/lib/auth';
 import { FontFamily, LetterSpacing, Spacing, SproutlyColors } from '@/constants/theme';
 
 export default function WelcomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { refreshProfile } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const goToOnboarding = () => {
-    router.push('/(onboarding)/profile' as Href);
+    router.replace('/(onboarding)/profile' as Href);
+  };
+
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true);
+    try {
+      const { cancelled, session } = await signInWithGoogle();
+      if (cancelled || !session) return;
+
+      await refreshProfile();
+      goToOnboarding();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Google sign-in failed. Please try again.';
+      Alert.alert('Sign in failed', message);
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const handleAppleSignIn = () => {
+    Alert.alert('Coming soon', 'Apple sign-in is not set up yet. Use Google or email for now.');
+  };
+
+  const handleEmailSignIn = () => {
+    router.push('/(auth)/email' as Href);
   };
 
   return (
@@ -44,9 +73,16 @@ export default function WelcomeScreen() {
           </View>
 
           <View style={styles.buttons}>
-            <AuthButton provider="google" onPress={goToOnboarding} />
-            <AuthButton provider="apple" onPress={goToOnboarding} />
-            <AuthButton provider="email" onPress={goToOnboarding} />
+            <AuthButton
+              provider="google"
+              onPress={handleGoogleSignIn}
+              disabled={googleLoading}
+            />
+            {googleLoading ? (
+              <ActivityIndicator color={SproutlyColors.primary} style={styles.spinner} />
+            ) : null}
+            <AuthButton provider="apple" onPress={handleAppleSignIn} />
+            <AuthButton provider="email" onPress={handleEmailSignIn} />
           </View>
         </ScrollView>
       </GradientBackground>
@@ -94,5 +130,8 @@ const styles = StyleSheet.create({
     gap: 12,
     marginTop: 'auto',
     paddingTop: Spacing.three,
+  },
+  spinner: {
+    marginTop: -4,
   },
 });

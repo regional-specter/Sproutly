@@ -13,6 +13,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { DefaultTheme, ThemeProvider } from 'expo-router';
 
+import { AuthProvider } from '@/contexts/auth-context';
 import { SproutlyColors } from '@/constants/theme';
 
 SplashScreen.preventAutoHideAsync();
@@ -53,12 +54,15 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={SproutlyTheme}>
-      <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(onboarding)" />
-        <Stack.Screen name="(app)" />
-      </Stack>
+      <AuthProvider>
+        <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="auth/callback" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(onboarding)" />
+          <Stack.Screen name="(app)" />
+        </Stack>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

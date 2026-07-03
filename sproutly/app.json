@@ -32,6 +32,13 @@
           "image": "./assets/figma/White-Logo.png",
           "imageWidth": 120
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Sproutly needs access to your photos so you can add plant images.",
+          "cameraPermission": "Sproutly needs camera access so you can photograph your plants."
+        }
       ]
     ],
     "experiments": {

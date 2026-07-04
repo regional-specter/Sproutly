@@ -1,4 +1,4 @@
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, type Href } from 'expo-router';
 import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
 import { useCallback, useState } from 'react';
@@ -47,6 +47,7 @@ function PlantCard({ plant }: { plant: HomePlant }) {
   return (
     <Pressable
       accessibilityRole="button"
+      onPress={() => router.push(`/plant/${plant.id}` as Href)}
       style={({ pressed }) => [styles.plantCard, pressed && styles.pressed]}>
       <PlantImage plant={plant} />
 

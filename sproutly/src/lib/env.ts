@@ -17,12 +17,21 @@ export const env = {
     'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
     'NEXT_PUBLIC_SUPABASE_ANON_KEY',
   ),
+  geminiApiKey: readEnv('EXPO_PUBLIC_GEMINI_API'),
 } as const;
 
 export function assertSupabaseEnv(): void {
   if (!env.supabaseUrl || !env.supabaseAnonKey) {
     throw new Error(
       'Missing Supabase env vars. Add EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY to sproutly/.env.local (next to package.json, not inside src/).',
+    );
+  }
+}
+
+export function assertGeminiEnv(): void {
+  if (!env.geminiApiKey) {
+    throw new Error(
+      'Missing Gemini API key. Add EXPO_PUBLIC_GEMINI_API to sproutly/.env.local.',
     );
   }
 }

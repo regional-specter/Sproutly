@@ -1,5 +1,22 @@
 export type PlantCategory = 'houseplant' | 'cutting' | 'vegetable';
 export type PlantSource = 'manual' | 'scan';
+export type ScanType = 'identification' | 'health_check' | 'propagation';
+export type LogType =
+  | 'status_update'
+  | 'watering'
+  | 'misting'
+  | 'repotting'
+  | 'fertilizing'
+  | 'note';
+
+export type PlantCareFacts = {
+  light?: string;
+  water?: string;
+  soil?: string;
+  potting?: string;
+  feeding?: string;
+  temperature?: string;
+};
 
 export type Profile = {
   id: string;
@@ -37,6 +54,30 @@ export type Plant = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+};
+
+export type Scan = {
+  id: string;
+  plant_id: string | null;
+  user_id: string;
+  image_url: string;
+  scan_type: ScanType;
+  species_identified: string | null;
+  confidence_score: number | null;
+  health_score: number | null;
+  health_status: string | null;
+  ai_raw_response: Record<string, unknown> | null;
+  created_at: string;
+};
+
+export type PlantLog = {
+  id: string;
+  plant_id: string;
+  scan_id: string | null;
+  log_type: LogType;
+  notes: string | null;
+  health_score: number | null;
+  created_at: string;
 };
 
 export type HomePlant = {
@@ -95,6 +136,34 @@ export type Database = {
         Update: Partial<Plant>;
         Relationships: [];
       };
+      scans: {
+        Row: Scan;
+        Insert: {
+          plant_id?: string | null;
+          user_id: string;
+          image_url: string;
+          scan_type?: ScanType;
+          species_identified?: string | null;
+          confidence_score?: number | null;
+          health_score?: number | null;
+          health_status?: string | null;
+          ai_raw_response?: Record<string, unknown> | null;
+        };
+        Update: Partial<Scan>;
+        Relationships: [];
+      };
+      plant_logs: {
+        Row: PlantLog;
+        Insert: {
+          plant_id: string;
+          scan_id?: string | null;
+          log_type: LogType;
+          notes?: string | null;
+          health_score?: number | null;
+        };
+        Update: Partial<PlantLog>;
+        Relationships: [];
+      };
     };
     Views: {
       home_plants: {
@@ -110,6 +179,14 @@ export type Database = {
       user_rank_progress: {
         Args: { p_user_id: string };
         Returns: UserRankProgress[];
+      };
+      can_user_scan: {
+        Args: { uid: string };
+        Returns: boolean;
+      };
+      increment_scan_count: {
+        Args: { uid: string };
+        Returns: undefined;
       };
     };
     Enums: {

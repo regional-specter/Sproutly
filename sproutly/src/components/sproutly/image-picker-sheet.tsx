@@ -21,6 +21,8 @@ type ImagePickerSheetProps = {
   visible: boolean;
   onClose: () => void;
   onSelect: (option: ImagePickerOption) => void;
+  /** Use overlay when shown inside another Modal — React Native cannot stack Modals reliably. */
+  presentation?: 'modal' | 'overlay';
 };
 
 type OptionItem =
@@ -35,7 +37,12 @@ const OPTIONS: OptionItem[] = [
 
 const ANIMATION_MS = 280;
 
-export function ImagePickerSheet({ visible, onClose, onSelect }: ImagePickerSheetProps) {
+function ImagePickerSheetContent({
+  visible,
+  onClose,
+  onSelect,
+  presentation = 'modal',
+}: ImagePickerSheetProps) {
   const insets = useSafeAreaInsets();
   const backdropOpacity = useSharedValue(0);
   const sheetTranslateY = useSharedValue(400);
@@ -64,46 +71,77 @@ export function ImagePickerSheet({ visible, onClose, onSelect }: ImagePickerShee
     transform: [{ translateY: sheetTranslateY.value }],
   }));
 
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <View style={presentation === 'overlay' ? styles.overlayEmbedded : styles.overlay}>
+      <Animated.View style={[styles.backdrop, backdropStyle]}>
+        <Pressable style={styles.backdropPressable} onPress={onClose} accessibilityRole="button" />
+      </Animated.View>
+
+      <Animated.View
+        style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 16) }, sheetStyle]}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Choose an icon</Text>
+          <Pressable
+            onPress={onClose}
+            style={styles.closeButton}
+            accessibilityLabel="Close"
+            accessibilityRole="button">
+            <CancelRoundIcon size={28} />
+          </Pressable>
+        </View>
+
+        <View style={styles.options}>
+          {OPTIONS.map((option) => (
+            <Pressable
+              key={option.id}
+              style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
+              onPress={() => {
+                onSelect(option.id);
+                onClose();
+              }}>
+              {'emoji' in option ? (
+                <Text style={styles.optionEmoji}>{option.emoji}</Text>
+              ) : (
+                <option.Icon size={24} />
+              )}
+              <Text style={styles.optionLabel}>{option.label}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </Animated.View>
+    </View>
+  );
+}
+
+export function ImagePickerSheet({
+  visible,
+  onClose,
+  onSelect,
+  presentation = 'modal',
+}: ImagePickerSheetProps) {
+  if (presentation === 'overlay') {
+    return (
+      <ImagePickerSheetContent
+        visible={visible}
+        onClose={onClose}
+        onSelect={onSelect}
+        presentation="overlay"
+      />
+    );
+  }
+
   return (
     <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
-      <View style={styles.overlay}>
-        <Animated.View style={[styles.backdrop, backdropStyle]}>
-          <Pressable style={styles.backdropPressable} onPress={onClose} accessibilityRole="button" />
-        </Animated.View>
-
-        <Animated.View
-          style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 16) }, sheetStyle]}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Choose an icon</Text>
-            <Pressable
-              onPress={onClose}
-              style={styles.closeButton}
-              accessibilityLabel="Close"
-              accessibilityRole="button">
-              <CancelRoundIcon size={28} />
-            </Pressable>
-          </View>
-
-          <View style={styles.options}>
-            {OPTIONS.map((option) => (
-              <Pressable
-                key={option.id}
-                style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
-                onPress={() => {
-                  onSelect(option.id);
-                  onClose();
-                }}>
-                {'emoji' in option ? (
-                  <Text style={styles.optionEmoji}>{option.emoji}</Text>
-                ) : (
-                  <option.Icon size={24} />
-                )}
-                <Text style={styles.optionLabel}>{option.label}</Text>
-              </Pressable>
-            ))}
-          </View>
-        </Animated.View>
-      </View>
+      <ImagePickerSheetContent
+        visible={visible}
+        onClose={onClose}
+        onSelect={onSelect}
+        presentation="modal"
+      />
     </Modal>
   );
 }
@@ -112,6 +150,11 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'flex-end',
+  },
+  overlayEmbedded: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+    zIndex: 10,
   },
   backdrop: {
     ...StyleSheet.absoluteFill,

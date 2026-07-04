@@ -70,7 +70,7 @@ function PlantCard({ plant }: { plant: HomePlant }) {
       </View>
 
       <SymbolView
-        name={{ ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' }}
+        name="chevron.right"
         size={14}
         tintColor={SproutlyColors.textMuted}
       />
@@ -168,7 +168,7 @@ export default function HomeScreen() {
                 onPress={() => setAddPlantVisible(true)}
                 style={({ pressed }) => [styles.addButton, pressed && styles.pressed]}>
                 <SymbolView
-                  name={{ ios: 'plus', android: 'add', web: 'add' }}
+                  name="plus"
                   size={18}
                   tintColor={SproutlyColors.white}
                   weight="semibold"
@@ -201,7 +201,7 @@ export default function HomeScreen() {
             <View style={styles.progressHeader}>
               <View style={styles.progressIconWrap}>
                 <SymbolView
-                  name={{ ios: 'bolt.fill', android: 'bolt', web: 'bolt' }}
+                  name="bolt.fill"
                   size={20}
                   tintColor={SproutlyColors.primary}
                 />

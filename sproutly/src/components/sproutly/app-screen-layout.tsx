@@ -58,7 +58,7 @@ export function AppScreenLayout({
             onPress={onNotificationPress}
             style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
             <SymbolView
-              name={{ ios: 'bell', android: 'notifications', web: 'notifications' }}
+              name="bell"
               size={22}
               tintColor={SproutlyColors.white}
               weight="regular"
@@ -76,7 +76,7 @@ export function AppScreenLayout({
             ) : (
               <View style={styles.avatarPlaceholder}>
                 <SymbolView
-                  name={{ ios: 'person.fill', android: 'person', web: 'person' }}
+                  name="person.fill"
                   size={18}
                   tintColor={SproutlyColors.white}
                 />

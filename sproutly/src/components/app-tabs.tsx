@@ -1,4 +1,4 @@
-import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 
 import { SproutlyColors } from '@/constants/theme';
 
@@ -9,26 +9,26 @@ export default function AppTabs() {
       indicatorColor={SproutlyColors.progressTrack}
       labelStyle={{ selected: { color: SproutlyColors.black } }}>
       <NativeTabs.Trigger name="home">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/home.png')}
-          renderingMode="template"
+        <Label>Home</Label>
+        <Icon
+          sf="house"
+          androidSrc={require('@/assets/images/tabIcons/home.png')}
         />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="analysis">
-        <NativeTabs.Trigger.Label>Analysis</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
+        <Label>Analysis</Label>
+        <Icon
+          sf="chart.bar"
+          androidSrc={require('@/assets/images/tabIcons/explore.png')}
         />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="settings">
-        <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
+        <Label>Settings</Label>
+        <Icon
+          sf="gearshape"
+          androidSrc={require('@/assets/images/tabIcons/explore.png')}
         />
       </NativeTabs.Trigger>
     </NativeTabs>

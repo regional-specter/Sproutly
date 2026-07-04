@@ -192,24 +192,25 @@ export function AddPlantSheet({ visible, userId, onClose, onPlantCreated }: AddP
               />
             </View>
           </Animated.View>
+
+          <ImagePickerSheet
+            presentation="overlay"
+            visible={pickerVisible}
+            onClose={() => setPickerVisible(false)}
+            onSelect={async (option) => {
+              if (option === 'emoji') {
+                setPlantImageUri(null);
+                return;
+              }
+
+              const uri = await pickImage(option);
+              if (uri) {
+                setPlantImageUri(uri);
+              }
+            }}
+          />
         </KeyboardAvoidingView>
       </Modal>
-
-      <ImagePickerSheet
-        visible={pickerVisible}
-        onClose={() => setPickerVisible(false)}
-        onSelect={async (option) => {
-          if (option === 'emoji') {
-            setPlantImageUri(null);
-            return;
-          }
-
-          const uri = await pickImage(option);
-          if (uri) {
-            setPlantImageUri(uri);
-          }
-        }}
-      />
     </>
   );
 }

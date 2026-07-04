@@ -13,6 +13,11 @@ export type Profile = {
   referral_code: string;
   referred_by: string | null;
   referral_credit_days: number;
+  total_xp: number;
+  level: number;
+  current_streak_days: number;
+  longest_streak_days: number;
+  last_active_date: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -32,6 +37,30 @@ export type Plant = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+};
+
+export type HomePlant = {
+  id: string;
+  user_id: string;
+  nickname: string;
+  species_name: string | null;
+  species_common_name: string | null;
+  cover_image_url: string | null;
+  current_health_score: number | null;
+  current_health_status: string | null;
+  category: PlantCategory;
+  added_via: PlantSource;
+  created_at: string;
+  updated_at: string;
+  checkup_count: number;
+};
+
+export type UserRankProgress = {
+  current_rank_title: string;
+  current_rank_subtitle: string;
+  next_rank_title: string | null;
+  xp_current: number;
+  xp_target: number;
 };
 
 export type Database = {
@@ -67,8 +96,22 @@ export type Database = {
         Relationships: [];
       };
     };
-    Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Views: {
+      home_plants: {
+        Row: HomePlant;
+        Relationships: [];
+      };
+    };
+    Functions: {
+      level_progress: {
+        Args: { xp: number };
+        Returns: number;
+      };
+      user_rank_progress: {
+        Args: { p_user_id: string };
+        Returns: UserRankProgress[];
+      };
+    };
     Enums: {
       plant_category: PlantCategory;
       plant_source: PlantSource;

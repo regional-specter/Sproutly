@@ -1,6 +1,8 @@
+import { useFocusEffect } from 'expo-router';
 import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { AppScreenLayout } from '@/components/sproutly/app-screen-layout';
 import {
@@ -11,166 +13,214 @@ import {
 } from '@/components/sproutly/figma-icons';
 import { LevelProgressRing } from '@/components/sproutly/level-progress-ring';
 import { useAuth } from '@/contexts/auth-context';
+import {
+  fetchHomeScreenData,
+  formatPlantCount,
+  formatStreakLabel,
+  getFirstName,
+  getPlantSpeciesLabel,
+  type HomeScreenData,
+} from '@/lib/home';
+import type { HomePlant } from '@/types/database';
 import { FontFamily, LetterSpacing, Spacing, SproutlyColors } from '@/constants/theme';
 
-type MockPlant = {
-  id: string;
-  name: string;
-  species: string;
-  checkups: number;
-  health: number;
-  image: string;
-};
-
-const MOCK_PLANTS: MockPlant[] = [
-  {
-    id: '1',
-    name: 'Snake Plant',
-    species: 'Sansevieria trifasciata',
-    checkups: 2,
-    health: 88,
-    image:
-      'https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?auto=format&fit=crop&w=200&h=200&q=80',
-  },
-  {
-    id: '2',
-    name: 'Chrysanthemum',
-    species: 'Chrysanthemum morifolium',
-    checkups: 1,
-    health: 92,
-    image:
-      'https://images.unsplash.com/photo-1509937528035-ad25c1d1c063?auto=format&fit=crop&w=200&h=200&q=80',
-  },
-  {
-    id: '3',
-    name: 'Monstera',
-    species: 'Monstera deliciosa',
-    checkups: 3,
-    health: 95,
-    image:
-      'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=200&h=200&q=80',
-  },
-];
-
-const MOCK_LEVEL = 6;
-const MOCK_LEVEL_PROGRESS = 0.62;
-const MOCK_PLANT_COUNT = 3;
-const MOCK_STREAK_LABEL = '1 Week';
-const MOCK_XP_CURRENT = 780;
-const MOCK_XP_TARGET = 2000;
-
-function getFirstName(fullName: string | null | undefined, email: string | undefined) {
-  if (fullName?.trim()) {
-    return fullName.trim().split(/\s+/)[0];
+function PlantImage({ plant }: { plant: HomePlant }) {
+  if (plant.cover_image_url) {
+    return (
+      <Image source={{ uri: plant.cover_image_url }} style={styles.plantImage} contentFit="cover" />
+    );
   }
 
-  if (email) {
-    return email.split('@')[0];
-  }
+  return (
+    <View style={styles.plantImagePlaceholder}>
+      <LeafIcon size={20} />
+    </View>
+  );
+}
 
-  return 'Gardener';
+function PlantCard({ plant }: { plant: HomePlant }) {
+  const species = getPlantSpeciesLabel(plant);
+  const checkupLabel = plant.checkup_count === 1 ? '1 check-up' : `${plant.checkup_count} check-ups`;
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      style={({ pressed }) => [styles.plantCard, pressed && styles.pressed]}>
+      <PlantImage plant={plant} />
+
+      <View style={styles.plantDetails}>
+        <Text style={styles.plantName}>{plant.nickname}</Text>
+        {species ? <Text style={styles.plantSpecies}>{species}</Text> : null}
+
+        <View style={styles.plantStats}>
+          <View style={styles.statItem}>
+            <NotesMedicalIcon size={11} />
+            <Text style={styles.statText}>{checkupLabel}</Text>
+          </View>
+
+          {plant.current_health_score != null ? (
+            <View style={styles.statItem}>
+              <HeartbeatIcon size={13} />
+              <Text style={[styles.statText, styles.healthText]}>{plant.current_health_score}%</Text>
+            </View>
+          ) : null}
+        </View>
+      </View>
+
+      <SymbolView
+        name={{ ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' }}
+        size={14}
+        tintColor={SproutlyColors.textMuted}
+      />
+    </Pressable>
+  );
 }
 
 export default function HomeScreen() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
+  const [homeData, setHomeData] = useState<HomeScreenData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const firstName = getFirstName(profile?.full_name, profile?.email);
-  const xpProgress = MOCK_XP_CURRENT / MOCK_XP_TARGET;
+
+  const loadHomeData = useCallback(async () => {
+    if (!user?.id) {
+      setHomeData(null);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      setError(null);
+      const data = await fetchHomeScreenData(user.id);
+      setHomeData(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load home data');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user?.id]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsLoading(true);
+      loadHomeData();
+    }, [loadHomeData]),
+  );
+
+  const xpProgress =
+    homeData && homeData.rank.xp_target > 0
+      ? Math.min(homeData.rank.xp_current / homeData.rank.xp_target, 1)
+      : 0;
 
   return (
     <AppScreenLayout>
-      <View style={styles.welcomeCard}>
-        <LevelProgressRing level={MOCK_LEVEL} progress={MOCK_LEVEL_PROGRESS} />
-
-        <View style={styles.welcomeContent}>
-          <Text style={styles.welcomeTitle}>Welcome Back, {firstName},</Text>
-          <Text style={styles.welcomeSubtitle}>Snap a photo to update your garden</Text>
-
-          <View style={styles.tagRow}>
-            <View style={[styles.tag, styles.plantsTag]}>
-              <LeafIcon size={10} />
-              {/* Combined the base tag text style with a unique plants text style */}
-              <Text style={[styles.tagText, styles.plantsTagText]}>{MOCK_PLANT_COUNT} Plants</Text>
-            </View>
-
-            <View style={[styles.tag, styles.streakTag]}>
-              <FireAltIcon size={10} />
-              {/* Combined the base tag text style with a unique streak text style */}
-              <Text style={[styles.tagText, styles.streakTagText]}>{MOCK_STREAK_LABEL}</Text>
-            </View>
-          </View>
+      {isLoading ? (
+        <View style={styles.centeredState}>
+          <ActivityIndicator color={SproutlyColors.primary} />
         </View>
-      </View>
+      ) : error ? (
+        <View style={styles.centeredState}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      ) : homeData ? (
+        <>
+          <View style={styles.welcomeCard}>
+            <LevelProgressRing level={homeData.level} progress={homeData.levelProgress} />
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>All Plants</Text>
+            <View style={styles.welcomeContent}>
+              <Text style={styles.welcomeTitle}>Welcome Back, {firstName},</Text>
+              <Text style={styles.welcomeSubtitle}>Snap a photo to update your garden</Text>
 
-        <View style={styles.plantList}>
-          {MOCK_PLANTS.map((plant) => (
-            <Pressable
-              key={plant.id}
-              accessibilityRole="button"
-              style={({ pressed }) => [styles.plantCard, pressed && styles.pressed]}>
-              <Image source={{ uri: plant.image }} style={styles.plantImage} contentFit="cover" />
+              <View style={styles.tagRow}>
+                <View style={[styles.tag, styles.plantsTag]}>
+                  <LeafIcon size={10} />
+                  <Text style={[styles.tagText, styles.plantsTagText]}>
+                    {formatPlantCount(homeData.plantCount)}
+                  </Text>
+                </View>
 
-              <View style={styles.plantDetails}>
-                <Text style={styles.plantName}>{plant.name}</Text>
-                <Text style={styles.plantSpecies}>{plant.species}</Text>
-
-                <View style={styles.plantStats}>
-                  <View style={styles.statItem}>
-                    <NotesMedicalIcon size={11} />
-                    <Text style={styles.statText}>{plant.checkups} check-ups</Text>
-                  </View>
-
-                  <View style={styles.statItem}>
-                    <HeartbeatIcon size={13} />
-                    <Text style={[styles.statText, styles.healthText]}>{plant.health}%</Text>
-                  </View>
+                <View style={[styles.tag, styles.streakTag]}>
+                  <FireAltIcon size={10} />
+                  <Text style={[styles.tagText, styles.streakTagText]}>
+                    {formatStreakLabel(homeData.streakDays)}
+                  </Text>
                 </View>
               </View>
-
-              <SymbolView
-                name={{ ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' }}
-                size={14}
-                tintColor={SproutlyColors.textMuted}
-              />
-            </Pressable>
-          ))}
-        </View>
-      </View>
-
-      <View style={styles.progressCard}>
-        <View style={styles.progressHeader}>
-          <View style={styles.progressIconWrap}>
-            <SymbolView
-              name={{ ios: 'bolt.fill', android: 'bolt', web: 'bolt' }}
-              size={20}
-              tintColor={SproutlyColors.primary}
-            />
+            </View>
           </View>
 
-          <View style={styles.progressCopy}>
-            <Text style={styles.progressTitle}>Green Thumb</Text>
-            <Text style={styles.progressSubtitle}>Your plants flourish under your care!</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>All Plants</Text>
+
+            {homeData.plants.length > 0 ? (
+              <View style={styles.plantList}>
+                {homeData.plants.map((plant) => (
+                  <PlantCard key={plant.id} plant={plant} />
+                ))}
+              </View>
+            ) : (
+              <Text style={styles.emptyText}>
+                No plants yet. Snap a photo to add your first one!
+              </Text>
+            )}
           </View>
-        </View>
 
-        <View style={styles.xpLabels}>
-          <Text style={styles.xpLabel}>Progress to Plant Expert</Text>
-          <Text style={styles.xpValue}>
-            {MOCK_XP_CURRENT.toLocaleString()}/{MOCK_XP_TARGET.toLocaleString()} XP
-          </Text>
-        </View>
+          <View style={styles.progressCard}>
+            <View style={styles.progressHeader}>
+              <View style={styles.progressIconWrap}>
+                <SymbolView
+                  name={{ ios: 'bolt.fill', android: 'bolt', web: 'bolt' }}
+                  size={20}
+                  tintColor={SproutlyColors.primary}
+                />
+              </View>
 
-        <View style={styles.xpTrack}>
-          <View style={[styles.xpFill, { width: `${xpProgress * 100}%` }]} />
-        </View>
-      </View>
+              <View style={styles.progressCopy}>
+                <Text style={styles.progressTitle}>{homeData.rank.current_rank_title}</Text>
+                <Text style={styles.progressSubtitle}>{homeData.rank.current_rank_subtitle}</Text>
+              </View>
+            </View>
+
+            {homeData.rank.next_rank_title ? (
+              <>
+                <View style={styles.xpLabels}>
+                  <Text style={styles.xpLabel}>Progress to {homeData.rank.next_rank_title}</Text>
+                  <Text style={styles.xpValue}>
+                    {homeData.rank.xp_current.toLocaleString()}/
+                    {homeData.rank.xp_target.toLocaleString()} XP
+                  </Text>
+                </View>
+
+                <View style={styles.xpTrack}>
+                  <View style={[styles.xpFill, { width: `${xpProgress * 100}%` }]} />
+                </View>
+              </>
+            ) : (
+              <Text style={styles.maxRankText}>You&apos;ve reached the highest rank!</Text>
+            )}
+          </View>
+        </>
+      ) : null}
     </AppScreenLayout>
   );
 }
 
 const styles = StyleSheet.create({
+  centeredState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.six,
+  },
+  errorText: {
+    fontFamily: FontFamily.interMedium,
+    fontSize: 14,
+    letterSpacing: LetterSpacing.body,
+    color: SproutlyColors.textMuted,
+    textAlign: 'center',
+  },
   welcomeCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -221,12 +271,11 @@ const styles = StyleSheet.create({
     letterSpacing: LetterSpacing.body,
     color: SproutlyColors.black,
   },
-  // Add these new specific text color overrides right below it
   plantsTagText: {
-    color: '#4CA04F', // Replace with your actual theme color key
+    color: '#4CA04F',
   },
   streakTagText: {
-    color: '#F84B4C', // Replace with your actual theme color key
+    color: '#F84B4C',
   },
   section: {
     gap: Spacing.three,
@@ -236,6 +285,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     letterSpacing: LetterSpacing.headingSm,
     color: SproutlyColors.black,
+  },
+  emptyText: {
+    fontFamily: FontFamily.interMedium,
+    fontSize: 14,
+    letterSpacing: LetterSpacing.body,
+    color: SproutlyColors.textMuted,
   },
   plantList: {
     gap: Spacing.two,
@@ -254,6 +309,14 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
+  },
+  plantImagePlaceholder: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: SproutlyColors.plantsTagBg,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   plantDetails: {
     flex: 1,
@@ -322,6 +385,12 @@ const styles = StyleSheet.create({
     color: SproutlyColors.black,
   },
   progressSubtitle: {
+    fontFamily: FontFamily.interMedium,
+    fontSize: 13,
+    letterSpacing: LetterSpacing.body,
+    color: SproutlyColors.textMuted,
+  },
+  maxRankText: {
     fontFamily: FontFamily.interMedium,
     fontSize: 13,
     letterSpacing: LetterSpacing.body,

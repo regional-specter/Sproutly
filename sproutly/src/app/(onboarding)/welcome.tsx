@@ -11,7 +11,7 @@ export default function OnboardingWelcomeScreen() {
   const insets = useSafeAreaInsets();
 
   const goToApp = () => {
-    router.replace('/(app)' as Href);
+    router.replace('/(app)/home' as Href);
   };
 
   return (

@@ -27,7 +27,7 @@ export default function SplashScreen() {
         return;
       }
 
-      router.replace('/(app)' as Href);
+      router.replace('/(app)/home' as Href);
     }, SPLASH_DURATION_MS);
 
     return () => clearTimeout(timer);

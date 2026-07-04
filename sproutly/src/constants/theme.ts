@@ -10,6 +10,11 @@ export const SproutlyColors = {
   white: '#FFFFFF',
   black: '#000000',
   textMuted: '#9CA3AF',
+  plantsTagBg: '#CFE4D1',
+  streakTagBg: '#F9CED0',
+  cardBorder: '#F0F0F3',
+  healthGreen: '#06C56C',
+  progressTrack: '#E8F3E9',
 } as const;
 
 export const Colors = {

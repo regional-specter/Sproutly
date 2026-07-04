@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { AppScreenLayout } from '@/components/sproutly/app-screen-layout';
+import { AddPlantSheet } from '@/components/sproutly/add-plant-sheet';
 import {
   FireAltIcon,
   HeartbeatIcon,
@@ -12,6 +13,7 @@ import {
   NotesMedicalIcon,
 } from '@/components/sproutly/figma-icons';
 import { LevelProgressRing } from '@/components/sproutly/level-progress-ring';
+import { PrimaryButton } from '@/components/sproutly/primary-button';
 import { useAuth } from '@/contexts/auth-context';
 import {
   fetchHomeScreenData,
@@ -77,10 +79,11 @@ function PlantCard({ plant }: { plant: HomePlant }) {
 }
 
 export default function HomeScreen() {
-  const { profile, user } = useAuth();
+  const { profile, user, refreshProfile } = useAuth();
   const [homeData, setHomeData] = useState<HomeScreenData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [addPlantVisible, setAddPlantVisible] = useState(false);
 
   const firstName = getFirstName(profile?.full_name, profile?.email);
 
@@ -113,6 +116,11 @@ export default function HomeScreen() {
     homeData && homeData.rank.xp_target > 0
       ? Math.min(homeData.rank.xp_current / homeData.rank.xp_target, 1)
       : 0;
+
+  const handlePlantCreated = useCallback(async () => {
+    await refreshProfile();
+    await loadHomeData();
+  }, [loadHomeData, refreshProfile]);
 
   return (
     <AppScreenLayout>
@@ -152,7 +160,21 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>All Plants</Text>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>All Plants</Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Add plant"
+                onPress={() => setAddPlantVisible(true)}
+                style={({ pressed }) => [styles.addButton, pressed && styles.pressed]}>
+                <SymbolView
+                  name={{ ios: 'plus', android: 'add', web: 'add' }}
+                  size={18}
+                  tintColor={SproutlyColors.white}
+                  weight="semibold"
+                />
+              </Pressable>
+            </View>
 
             {homeData.plants.length > 0 ? (
               <View style={styles.plantList}>
@@ -161,9 +183,17 @@ export default function HomeScreen() {
                 ))}
               </View>
             ) : (
-              <Text style={styles.emptyText}>
-                No plants yet. Snap a photo to add your first one!
-              </Text>
+              <View style={styles.emptyState}>
+                <Text style={styles.emptyText}>
+                  No plants yet. Add your first one to start your garden!
+                </Text>
+                <PrimaryButton
+                  label="Add plant"
+                  variant="primary"
+                  onPress={() => setAddPlantVisible(true)}
+                  style={styles.emptyButton}
+                />
+              </View>
             )}
           </View>
 
@@ -202,6 +232,15 @@ export default function HomeScreen() {
             )}
           </View>
         </>
+      ) : null}
+
+      {user?.id ? (
+        <AddPlantSheet
+          visible={addPlantVisible}
+          userId={user.id}
+          onClose={() => setAddPlantVisible(false)}
+          onPlantCreated={handlePlantCreated}
+        />
       ) : null}
     </AppScreenLayout>
   );
@@ -280,6 +319,20 @@ const styles = StyleSheet.create({
   section: {
     gap: Spacing.three,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.two,
+  },
+  addButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: SproutlyColors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   sectionTitle: {
     fontFamily: FontFamily.interSemiBold,
     fontSize: 20,
@@ -291,6 +344,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     letterSpacing: LetterSpacing.body,
     color: SproutlyColors.textMuted,
+    textAlign: 'center',
+  },
+  emptyState: {
+    gap: Spacing.three,
+    alignItems: 'center',
+  },
+  emptyButton: {
+    maxWidth: 220,
   },
   plantList: {
     gap: Spacing.two,

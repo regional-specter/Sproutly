@@ -39,7 +39,9 @@
           "photosPermission": "Sproutly needs access to your photos so you can add plant images.",
           "cameraPermission": "Sproutly needs camera access so you can photograph your plants."
         }
-      ]
+      ],
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

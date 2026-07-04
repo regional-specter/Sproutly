@@ -1,7 +1,7 @@
 import * as Crypto from 'expo-crypto';
 
 import { supabase } from '@/lib/supabase';
-import type { Profile } from '@/types/database';
+import type { Plant, Profile } from '@/types/database';
 
 const PLANT_IMAGES_BUCKET = 'plant-images';
 
@@ -45,25 +45,35 @@ export async function uploadPlantImage(userId: string, localUri: string): Promis
   return data.publicUrl;
 }
 
-export async function createFirstPlant(params: {
+export async function createPlant(params: {
   userId: string;
   nickname: string;
   coverImageUrl?: string | null;
+  category?: Plant['category'];
+  addedVia?: Plant['added_via'];
 }) {
   const { data, error } = await supabase
     .from('plants')
     .insert({
       user_id: params.userId,
-      nickname: params.nickname,
+      nickname: params.nickname.trim(),
       cover_image_url: params.coverImageUrl ?? null,
-      added_via: 'manual',
-      category: 'houseplant',
+      added_via: params.addedVia ?? 'manual',
+      category: params.category ?? 'houseplant',
     })
     .select()
     .single();
 
   if (error) throw error;
   return data;
+}
+
+export async function createFirstPlant(params: {
+  userId: string;
+  nickname: string;
+  coverImageUrl?: string | null;
+}) {
+  return createPlant(params);
 }
 
 export async function userHasPlants(userId: string): Promise<boolean> {

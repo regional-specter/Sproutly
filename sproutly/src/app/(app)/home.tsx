@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 10,
     paddingVertical: 6,
-    borderRadius: 999,
+    borderRadius: 7,
   },
   plantsTag: {
     backgroundColor: SproutlyColors.plantsTagBg,

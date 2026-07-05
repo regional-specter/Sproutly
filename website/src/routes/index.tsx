@@ -29,7 +29,6 @@ function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
       <Hero />
-      <LogoBar />
       <Features />
       <HowItWorks />
       <Preview />
@@ -153,51 +152,51 @@ function HeroPhoneShowcase() {
   return (
     <div className="relative mx-auto mt-14 w-full max-w-3xl">
       <div className="relative flex min-h-[360px] items-end justify-center sm:min-h-[420px] md:min-h-[480px]">
-        <HeroDetailCard
-          icon={<Droplets className="h-4 w-4 text-sky-600" />}
-          iconBg="bg-sky-100"
-          title="Snake Plant needs water"
-          subtitle="Due today · Health 88%"
-          className="left-[-4%] top-[14%] flex max-w-[190px] rotate-[-5deg] sm:left-[2%] sm:top-[8%] sm:max-w-[240px] md:left-[-4%] md:top-[10%]"
-        />
-        <HeroDetailCard
-          icon={<AlertTriangle className="h-4 w-4 text-amber-600" />}
-          iconBg="bg-amber-100"
-          title="Low light detected"
-          subtitle="Move Peace Lily closer to window"
-          className="left-[-2%] top-[42%] hidden rotate-[-3deg] md:flex"
-          faded
-        />
-        <HeroDetailCard
-          icon={<Bell className="h-4 w-4 text-primary-dark" />}
-          iconBg="bg-primary/15"
-          title="3 plants need watering"
-          subtitle="Monstera, Pothos & Basil this week"
-          className="bottom-[18%] left-[0%] hidden rotate-[-2deg] lg:flex"
-        />
+      <HeroDetailCard
+        icon={<Droplets className="h-4 w-4 text-sky-600" />}
+        iconBg="bg-sky-100"
+        title="Snake Plant needs water"
+        subtitle="Due today · Health 88%"
+        className="left-[-4%] top-[14%] flex max-w-[190px] sm:left-[2%] sm:top-[8%] sm:max-w-[240px] md:left-[-4%] md:top-[10%]"
+      />
+      <HeroDetailCard
+        icon={<AlertTriangle className="h-4 w-4 text-amber-600" />}
+        iconBg="bg-amber-100"
+        title="Low light detected"
+        subtitle="Move Peace Lily closer to window"
+        className="left-[-2%] top-[42%] hidden md:flex"
+        faded
+      />
+      <HeroDetailCard
+        icon={<Bell className="h-4 w-4 text-primary-dark" />}
+        iconBg="bg-primary/15"
+        title="3 plants need watering"
+        subtitle="Monstera, Pothos & Basil this week"
+        className="bottom-[18%] left-[0%] hidden lg:flex"
+      />
 
-        <HeroDetailCard
-          icon={<TrendingUp className="h-4 w-4 text-primary-dark" />}
-          iconBg="bg-primary/15"
-          title="Monstera health improved"
-          subtitle="92% after yesterday's scan"
-          className="right-[-4%] top-[12%] flex max-w-[190px] rotate-[4deg] sm:right-[0%] sm:top-[6%] sm:max-w-[240px] md:right-[-2%]"
-        />
-        <HeroDetailCard
-          icon={<ScanLine className="h-4 w-4 text-violet-600" />}
-          iconBg="bg-violet-100"
-          title="Species identified"
-          subtitle="Fiddle Leaf Fig · Dracaena marginata"
-          className="right-[-4%] top-[36%] hidden rotate-[3deg] md:flex"
-        />
-        <HeroDetailCard
-          icon={<Sprout className="h-4 w-4 text-primary-dark" />}
-          iconBg="bg-primary/15"
-          title="Green Thumb unlocked"
-          subtitle="Level 6 · 780 / 2,000 XP"
-          className="bottom-[14%] right-[2%] hidden rotate-[5deg] sm:flex md:right-[-3%]"
-          faded
-        />
+      <HeroDetailCard
+        icon={<TrendingUp className="h-4 w-4 text-primary-dark" />}
+        iconBg="bg-primary/15"
+        title="Monstera health improved"
+        subtitle="92% after yesterday's scan"
+        className="right-[-4%] top-[12%] flex max-w-[190px] sm:right-[0%] sm:top-[6%] sm:max-w-[240px] md:right-[-2%]"
+      />
+      <HeroDetailCard
+        icon={<ScanLine className="h-4 w-4 text-violet-600" />}
+        iconBg="bg-violet-100"
+        title="Species identified"
+        subtitle="Fiddle Leaf Fig · Dracaena marginata"
+        className="right-[-4%] top-[36%] hidden md:flex"
+      />
+      <HeroDetailCard
+        icon={<Sprout className="h-4 w-4 text-primary-dark" />}
+        iconBg="bg-primary/15"
+        title="Green Thumb unlocked"
+        subtitle="Level 6 · 780 / 2,000 XP"
+        className="bottom-[14%] right-[2%] hidden sm:flex md:right-[-3%]"
+        faded
+      />
 
         <div className="relative z-10 translate-y-2 sm:translate-y-4">
           <PhoneShot
@@ -246,18 +245,18 @@ function WaitlistForm({ className = "" }: { className?: string }) {
           You're on the list — we'll be in touch soon.
         </div>
       ) : (
-        <div className="flex flex-col gap-2 rounded-full border border-border bg-card p-1.5 shadow-sm sm:flex-row sm:pl-5">
+        <div className="mx-auto max-w-md flex flex-col gap-2 rounded-full border border-border bg-card p-1 shadow-sm sm:flex-row sm:items-center sm:gap-0 sm:pl-5">
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@garden.com"
-            className="w-full bg-transparent px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none sm:px-0"
+            className="w-full bg-transparent px-4 py-2 text-sm placeholder:text-muted-foreground focus:outline-none sm:px-0 sm:py-0"
           />
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-transform hover:scale-[1.02]"
+            className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-foreground px-5 py-1.5 text-sm font-medium text-background transition-transform hover:scale-[1.02]"
           >
             Get early access
             <ArrowRight className="h-3.5 w-3.5" />
@@ -265,27 +264,6 @@ function WaitlistForm({ className = "" }: { className?: string }) {
         </div>
       )}
     </form>
-  );
-}
-
-function LogoBar() {
-  return (
-    <div className="mx-auto max-w-5xl px-5 pb-16 pt-6">
-      <p className="text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
-        Built for every plant parent
-      </p>
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm font-medium text-muted-foreground/80">
-        <span>Houseplants</span>
-        <span className="h-1 w-1 rounded-full bg-border" />
-        <span>Succulents</span>
-        <span className="h-1 w-1 rounded-full bg-border" />
-        <span>Herbs</span>
-        <span className="h-1 w-1 rounded-full bg-border" />
-        <span>Vegetables</span>
-        <span className="h-1 w-1 rounded-full bg-border" />
-        <span>Balcony gardens</span>
-      </div>
-    </div>
   );
 }
 

@@ -9,6 +9,10 @@ import {
   ArrowRight,
   Check,
   Star,
+  Droplets,
+  AlertTriangle,
+  TrendingUp,
+  Sprout,
 } from "lucide-react";
 
 import logo from "@/assets/logo.png";
@@ -101,24 +105,108 @@ function Hero() {
           <span>Loved by 2,400+ plant parents on the waitlist</span>
         </div>
 
-        <div className="relative mt-14 w-full">
-          <div className="flex items-end justify-center gap-2 sm:gap-6">
-            <PhoneShot
-              src={screenHome}
-              className="hidden w-[200px] translate-y-10 rotate-[-8deg] sm:block md:w-[240px]"
-            />
-            <PhoneShot
-              src={screenDetail}
-              className="w-[240px] md:w-[290px]"
-            />
-            <PhoneShot
-              src={screenHome}
-              className="hidden w-[200px] translate-y-10 rotate-[8deg] sm:block md:w-[240px]"
-            />
-          </div>
-        </div>
+        <HeroPhoneShowcase />
       </div>
     </section>
+  );
+}
+
+function HeroDetailCard({
+  icon,
+  iconBg,
+  title,
+  subtitle,
+  className = "",
+  faded = false,
+}: {
+  icon: React.ReactNode;
+  iconBg: string;
+  title: string;
+  subtitle: string;
+  className?: string;
+  faded?: boolean;
+}) {
+  return (
+    <div
+      className={`absolute flex max-w-[220px] items-center gap-3 rounded-2xl border border-white/80 bg-card/95 px-3.5 py-2.5 shadow-[0_12px_40px_-12px_rgba(33,33,33,0.18)] backdrop-blur-md sm:max-w-[240px] ${
+        faded ? "opacity-55 blur-[0.4px]" : ""
+      } ${className}`}
+    >
+      <div
+        className={`flex h-9 w-9 flex-none items-center justify-center rounded-full ${iconBg}`}
+      >
+        {icon}
+      </div>
+      <div className="min-w-0 text-left">
+        <p className="truncate text-[13px] font-semibold leading-tight text-foreground sm:text-sm">
+          {title}
+        </p>
+        <p className="truncate text-[11px] text-muted-foreground sm:text-xs">
+          {subtitle}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function HeroPhoneShowcase() {
+  return (
+    <div className="relative mx-auto mt-14 w-full max-w-3xl">
+      <div className="relative flex min-h-[360px] items-end justify-center sm:min-h-[420px] md:min-h-[480px]">
+        <HeroDetailCard
+          icon={<Droplets className="h-4 w-4 text-sky-600" />}
+          iconBg="bg-sky-100"
+          title="Snake Plant needs water"
+          subtitle="Due today · Health 88%"
+          className="left-[-4%] top-[14%] flex max-w-[190px] rotate-[-5deg] sm:left-[2%] sm:top-[8%] sm:max-w-[240px] md:left-[-4%] md:top-[10%]"
+        />
+        <HeroDetailCard
+          icon={<AlertTriangle className="h-4 w-4 text-amber-600" />}
+          iconBg="bg-amber-100"
+          title="Low light detected"
+          subtitle="Move Peace Lily closer to window"
+          className="left-[-2%] top-[42%] hidden rotate-[-3deg] md:flex"
+          faded
+        />
+        <HeroDetailCard
+          icon={<Bell className="h-4 w-4 text-primary-dark" />}
+          iconBg="bg-primary/15"
+          title="3 plants need watering"
+          subtitle="Monstera, Pothos & Basil this week"
+          className="bottom-[18%] left-[0%] hidden rotate-[-2deg] lg:flex"
+        />
+
+        <HeroDetailCard
+          icon={<TrendingUp className="h-4 w-4 text-primary-dark" />}
+          iconBg="bg-primary/15"
+          title="Monstera health improved"
+          subtitle="92% after yesterday's scan"
+          className="right-[-4%] top-[12%] flex max-w-[190px] rotate-[4deg] sm:right-[0%] sm:top-[6%] sm:max-w-[240px] md:right-[-2%]"
+        />
+        <HeroDetailCard
+          icon={<ScanLine className="h-4 w-4 text-violet-600" />}
+          iconBg="bg-violet-100"
+          title="Species identified"
+          subtitle="Fiddle Leaf Fig · Dracaena marginata"
+          className="right-[-4%] top-[36%] hidden rotate-[3deg] md:flex"
+        />
+        <HeroDetailCard
+          icon={<Sprout className="h-4 w-4 text-primary-dark" />}
+          iconBg="bg-primary/15"
+          title="Green Thumb unlocked"
+          subtitle="Level 6 · 780 / 2,000 XP"
+          className="bottom-[14%] right-[2%] hidden rotate-[5deg] sm:flex md:right-[-3%]"
+          faded
+        />
+
+        <div className="relative z-10 translate-y-2 sm:translate-y-4">
+          <PhoneShot
+            src={screenHome}
+            className="w-[250px] sm:w-[290px] md:w-[330px]"
+          />
+        </div>
+      </div>
+    </div>
   );
 }
 

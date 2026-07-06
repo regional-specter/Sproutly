@@ -1,10 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
-  Leaf,
-  ScanLine,
-  HeartPulse,
-  Bell,
   Sparkles,
   ArrowRight,
   ChevronRight,
@@ -21,6 +17,10 @@ import logoWhite from "@/assets/logo-white.png";
 import bgElements from "@/assets/bg-elements.png";
 import screenHome from "@/assets/screen-home.png";
 import screenDetail from "@/assets/screen-detail.png";
+import featureScan from "@/assets/feature-scan.png";
+import featureHealth from "@/assets/feature-score.png";
+import featureCare from "@/assets/feature-care.png";
+import featureReminders from "@/assets/feature-reminder.png";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -198,24 +198,28 @@ function WaitlistForm({
 function Features() {
   const items = [
     {
-      icon: ScanLine,
       title: "Instant plant scans",
       desc: "Point, snap, done. Our AI identifies the species and reads the leaves for stress signals in seconds.",
+      image: featureScan,
+      bg: "bg-[#4CA76B]",
     },
     {
-      icon: HeartPulse,
       title: "0–100 health score",
       desc: "A clear number that tells you if your plant is thriving, coasting, or asking for help right now.",
+      image: featureHealth,
+      bg: "bg-[#2F6B45]",
     },
     {
-      icon: Leaf,
       title: "Personalised care routines",
       desc: "Light, water, soil, feeding, temperature — a schedule that fits your specific plant, not a generic guide.",
+      image: featureCare,
+      bg: "bg-[#2F6B45]",
     },
     {
-      icon: Bell,
       title: "Gentle reminders",
       desc: "Watering, misting and check-in nudges so nothing wilts while you're busy living your life.",
+      image: featureReminders,
+      bg: "bg-[#2B5E3D]",
     },
   ];
 
@@ -235,18 +239,18 @@ function Features() {
       </div>
 
       <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {items.map(({ icon: Icon, title, desc }) => (
+        {items.map(({ title, desc, image, bg }) => (
           <div
             key={title}
-            className="group rounded-3xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_40px_-24px_rgba(56,124,77,0.35)]"
+            className={`relative flex aspect-[411/413] flex-col overflow-hidden rounded-[17px] p-6 text-white ${bg}`}
           >
-            <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Icon className="h-5 w-5" />
-            </div>
-            <h3 className="mt-5 text-lg font-semibold tracking-tight">{title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {desc}
-            </p>
+            <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-white/80">{desc}</p>
+            <img
+              src={image}
+              alt={title}
+              className="pointer-events-none absolute inset-x-0 bottom-0 w-full select-none"
+            />
           </div>
         ))}
       </div>

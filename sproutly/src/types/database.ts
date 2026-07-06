@@ -7,7 +7,11 @@ export type LogType =
   | 'misting'
   | 'repotting'
   | 'fertilizing'
-  | 'note';
+  | 'note'
+  | 'checkup';
+
+export type CareType = 'watering' | 'misting' | 'repotting' | 'fertilizing' | 'checkup';
+export type ReminderStatus = 'pending' | 'completed' | 'snoozed' | 'dismissed';
 
 export type PlantCareFacts = {
   light?: string;
@@ -78,6 +82,35 @@ export type PlantLog = {
   notes: string | null;
   health_score: number | null;
   created_at: string;
+};
+
+export type CareSchedule = {
+  id: string;
+  plant_id: string;
+  care_type: CareType;
+  frequency_days: number;
+  last_completed_at: string | null;
+  next_due_at: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Reminder = {
+  id: string;
+  plant_id: string;
+  user_id: string;
+  care_schedule_id: string | null;
+  care_type: CareType;
+  due_at: string;
+  status: ReminderStatus;
+  notified_at: string | null;
+  completed_at: string | null;
+  created_at: string;
+};
+
+export type CareTask = Reminder & {
+  plant_nickname: string;
 };
 
 export type HomePlant = {
@@ -164,6 +197,32 @@ export type Database = {
         Update: Partial<PlantLog>;
         Relationships: [];
       };
+      care_schedules: {
+        Row: CareSchedule;
+        Insert: {
+          plant_id: string;
+          care_type: CareType;
+          frequency_days: number;
+          next_due_at: string;
+          last_completed_at?: string | null;
+          is_active?: boolean;
+        };
+        Update: Partial<CareSchedule>;
+        Relationships: [];
+      };
+      reminders: {
+        Row: Reminder;
+        Insert: {
+          plant_id: string;
+          user_id: string;
+          care_schedule_id?: string | null;
+          care_type: CareType;
+          due_at: string;
+          status?: ReminderStatus;
+        };
+        Update: Partial<Reminder>;
+        Relationships: [];
+      };
     };
     Views: {
       home_plants: {
@@ -188,10 +247,30 @@ export type Database = {
         Args: { uid: string };
         Returns: undefined;
       };
+      generate_plant_care_schedules: {
+        Args: {
+          p_plant_id: string;
+          p_user_id: string;
+          p_watering_days?: number;
+          p_checkup_days?: number;
+        };
+        Returns: undefined;
+      };
+      ensure_weekly_reminders: {
+        Args: { p_user_id: string };
+        Returns: number;
+      };
+      complete_care_reminder: {
+        Args: { p_reminder_id: string; p_user_id: string };
+        Returns: string;
+      };
     };
     Enums: {
       plant_category: PlantCategory;
       plant_source: PlantSource;
+      care_type: CareType;
+      reminder_status: ReminderStatus;
+      log_type: LogType;
     };
     CompositeTypes: Record<string, never>;
   };

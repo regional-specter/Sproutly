@@ -1,5 +1,6 @@
 import * as Crypto from 'expo-crypto';
 
+import { generatePlantCareSchedules } from '@/lib/care-schedule';
 import { supabase } from '@/lib/supabase';
 import type { Plant, Profile } from '@/types/database';
 
@@ -65,6 +66,13 @@ export async function createPlant(params: {
     .single();
 
   if (error) throw error;
+
+  try {
+    await generatePlantCareSchedules(data.id, params.userId);
+  } catch {
+    // Schedules require the care_schedules migration; plant creation still succeeds.
+  }
+
   return data;
 }
 

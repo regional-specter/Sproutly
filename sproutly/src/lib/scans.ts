@@ -2,6 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Alert } from 'react-native';
 
 import { analyzePlantHealth } from '@/lib/gemini';
+import { parseWateringFrequencyDays } from '@/lib/care-schedule';
 import { uploadPlantImage } from '@/lib/plants';
 import { supabase } from '@/lib/supabase';
 import type { Plant, PlantCareFacts, Scan } from '@/types/database';
@@ -117,6 +118,14 @@ export async function performPlantHealthScan(params: {
     .eq('user_id', params.userId);
 
   if (plantError) throw plantError;
+
+  const wateringDays = parseWateringFrequencyDays(analysis.care.water);
+  await supabase
+    .from('care_schedules')
+    .update({ frequency_days: wateringDays, updated_at: new Date().toISOString() })
+    .eq('plant_id', params.plant.id)
+    .eq('care_type', 'watering')
+    .eq('is_active', true);
 
   await incrementScanCount(params.userId);
 

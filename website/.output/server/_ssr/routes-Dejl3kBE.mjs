@@ -1,7 +1,7 @@
 import { n as __toESM } from "../_runtime.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
-import { a as HeartPulse, c as ArrowRight, i as Leaf, n as Sparkles, o as Check, r as ScanLine, s as Bell, t as Star } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DWgo3ZJl.js
+import { a as Linkedin, c as HeartPulse, d as Check, f as Bell, i as ScanLine, l as Facebook, n as Sparkles, o as Leaf, p as ArrowRight, r as Send, s as Instagram, t as Star, u as ChevronRight } from "../_libs/lucide-react.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Dejl3kBE.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var logo_default = "/assets/logo-D7hjP5xy.png";
@@ -18,7 +18,6 @@ function Landing() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Features, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(HowItWorks, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Preview, {}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinalCta, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Footer, {})
 		]
 	});
@@ -152,11 +151,11 @@ function PhoneShot({ src, className = "" }) {
 		className: `block h-auto drop-shadow-[0_30px_40px_rgba(0,0,0,0.22)] ${className}`
 	});
 }
-function WaitlistForm({ className = "" }) {
+function WaitlistForm({ className = "", formId = "waitlist" }) {
 	const [email, setEmail] = (0, import_react.useState)("");
 	const [status, setStatus] = (0, import_react.useState)("idle");
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("form", {
-		id: "waitlist",
+		id: formId,
 		onSubmit: (e) => {
 			e.preventDefault();
 			if (!email) return;
@@ -358,98 +357,209 @@ function Preview() {
 		})
 	});
 }
-function FinalCta() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
-		className: "mx-auto max-w-6xl px-5 pb-24",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "relative overflow-hidden rounded-[2rem] px-6 py-16 text-center text-white sm:px-12 md:py-20",
-			style: { background: "linear-gradient(135deg, var(--brand-green) 0%, var(--brand-green-dark) 100%)" },
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10 blur-3xl" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-black/10 blur-3xl" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-					src: logo_white_default,
-					alt: "",
-					className: "mx-auto h-14 w-14"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-					className: "mx-auto mt-6 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl md:text-[44px]",
-					children: "Be the first to grow with Sproutly."
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "mx-auto mt-4 max-w-lg text-white/85",
-					children: "Join the waitlist for early access, launch-day perks and a free week of premium when we go live."
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-					onSubmit: (e) => {
-						e.preventDefault();
-						const form = e.currentTarget;
-						if (form.querySelector("input[type=email]")?.value) {
-							form.reset();
-							const status = form.querySelector("[data-status]");
-							if (status) status.textContent = "You're on the list. See you at launch 🌱";
-						}
-					},
-					className: "mx-auto mt-8 flex w-full max-w-md flex-col gap-2 rounded-full bg-white/10 p-1.5 backdrop-blur sm:flex-row sm:pl-5",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						type: "email",
-						required: true,
-						placeholder: "you@garden.com",
-						className: "w-full bg-transparent px-4 py-2.5 text-sm text-white placeholder:text-white/60 focus:outline-none sm:px-0"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						type: "submit",
-						className: "inline-flex items-center justify-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-primary-dark transition-transform hover:scale-[1.02]",
-						children: ["Join waitlist", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
-					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-status": true,
-					className: "mt-4 text-sm text-white/90",
-					"aria-live": "polite"
-				})
-			]
-		})
-	});
-}
 function Footer() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
-		className: "border-t border-border",
+		className: "bg-[#f7f7f7]",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-muted-foreground sm:flex-row",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center gap-2",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-						src: logo_default,
-						alt: "",
-						className: "h-6 w-6"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "font-medium text-foreground",
-						children: "Sproutly"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["© ", (/* @__PURE__ */ new Date()).getFullYear()] })
-				]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center gap-6",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-						href: "#features",
-						className: "hover:text-foreground",
-						children: "Features"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-						href: "#how",
-						className: "hover:text-foreground",
-						children: "How it works"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-						href: "#waitlist",
-						className: "hover:text-foreground",
-						children: "Waitlist"
-					})
-				]
-			})]
+			className: "mx-auto max-w-6xl px-5 pt-16 pb-12",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "relative overflow-hidden rounded-[2rem] px-6 py-14 text-center text-white sm:px-12 sm:py-16 md:py-20",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "absolute inset-0",
+							style: { background: "linear-gradient(135deg, #5cb85c 0%, #3d8b40 35%, #7ec850 65%, #489e4b 100%)" }
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -left-16 top-0 h-56 w-56 rounded-full bg-[#a8e063]/40 blur-3xl" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -right-10 top-8 h-64 w-64 rounded-full bg-[#f7d794]/30 blur-3xl" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute bottom-0 left-1/3 h-48 w-72 rounded-full bg-[#2d6a30]/50 blur-2xl" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -bottom-10 right-1/4 h-40 w-56 rounded-full bg-[#b8e994]/35 blur-3xl" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "relative z-10",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "mx-auto max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl md:text-[42px] md:leading-[1.1]",
+									children: "Let AI take the guesswork out of plant care"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg",
+									children: "From species ID and health scores to watering schedules and gentle reminders — automate the plant care your home garden shouldn't depend on guesswork for."
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+									href: "#waitlist",
+									className: "mt-8 inline-flex items-center gap-1 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-transform hover:scale-[1.02]",
+									children: ["Get early access", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "h-4 w-4" })]
+								})
+							]
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "sm:col-span-2 lg:col-span-1",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+									href: "#top",
+									className: "flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: logo_default,
+										alt: "Sproutly",
+										className: "h-6 w-6"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-base font-semibold text-foreground",
+										children: "Sproutly"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground",
+									children: "AI-powered plant care designed to help home gardeners identify, diagnose, and nurture every plant effortlessly and fast."
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "mt-5 flex items-center gap-4",
+									children: [
+										{
+											icon: Facebook,
+											label: "Facebook",
+											href: "#"
+										},
+										{
+											icon: Linkedin,
+											label: "LinkedIn",
+											href: "#"
+										},
+										{
+											icon: Instagram,
+											label: "Instagram",
+											href: "#"
+										},
+										{
+											icon: Send,
+											label: "Telegram",
+											href: "#"
+										}
+									].map(({ icon: Icon, label, href }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+										href,
+										"aria-label": label,
+										className: "text-muted-foreground transition-colors hover:text-foreground",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, { className: "h-4 w-4" })
+									}, label))
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "text-sm font-semibold text-foreground",
+							children: "Company"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+							className: "mt-4 space-y-3",
+							children: [
+								{
+									label: "Home",
+									href: "#top"
+								},
+								{
+									label: "About us",
+									href: "#features"
+								},
+								{
+									label: "Pricing",
+									href: "#waitlist"
+								},
+								{
+									label: "Blog",
+									href: "#preview"
+								},
+								{
+									label: "Blog Details",
+									href: "#preview"
+								}
+							].map(({ label, href }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								href,
+								className: "text-sm text-muted-foreground transition-colors hover:text-foreground",
+								children: label
+							}) }, label))
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "text-sm font-semibold text-foreground",
+							children: "Product"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+							className: "mt-4 space-y-3",
+							children: [
+								{
+									label: "Features",
+									href: "#features"
+								},
+								{
+									label: "Careers",
+									href: "#waitlist"
+								},
+								{
+									label: "How it works",
+									href: "#how"
+								},
+								{
+									label: "Contact",
+									href: "#waitlist"
+								}
+							].map(({ label, href }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								href,
+								className: "text-sm text-muted-foreground transition-colors hover:text-foreground",
+								children: label
+							}) }, label))
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "text-sm font-semibold text-foreground",
+								children: "Newsletter"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-4 text-sm leading-relaxed text-muted-foreground",
+								children: "Get tips, product updates, and insights on growing smarter with AI."
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(WaitlistForm, {
+								formId: "newsletter",
+								className: "mt-4 w-full"
+							})
+						] })
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "text-sm text-muted-foreground",
+						children: [
+							"© ",
+							(/* @__PURE__ */ new Date()).getFullYear(),
+							" Sproutly. All rights reserved."
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex flex-wrap items-center justify-center gap-x-6 gap-y-2",
+						children: [
+							{
+								label: "Privacy Policy",
+								href: "#"
+							},
+							{
+								label: "Terms of Service",
+								href: "#"
+							},
+							{
+								label: "Security",
+								href: "#"
+							},
+							{
+								label: "Cookie",
+								href: "#"
+							}
+						].map(({ label, href }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+							href,
+							className: "text-sm text-muted-foreground transition-colors hover:text-foreground",
+							children: label
+						}, label))
+					})]
+				})
+			]
 		})
 	});
 }

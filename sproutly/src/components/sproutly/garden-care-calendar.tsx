@@ -75,6 +75,10 @@ export function GardenCareCalendar({
   month,
 }: GardenCareCalendarProps) {
   const cells = buildCalendarCells(year, month);
+  const weeks: (Date | null)[][] = [];
+  for (let index = 0; index < cells.length; index += 7) {
+    weeks.push(cells.slice(index, index + 7));
+  }
   const plantLabel = plantCount === 1 ? '1 Plant' : `${plantCount} Plants`;
   const checkupLabel =
     weeklyCheckups === 1 ? '1 Regular Weekly Check-up' : `${weeklyCheckups} Regular Weekly Check-ups`;
@@ -121,8 +125,12 @@ export function GardenCareCalendar({
         </View>
 
         <View style={styles.grid}>
-          {cells.map((date, index) => (
-            <CalendarDay key={index} date={date} completedDates={completedDates} />
+          {weeks.map((week, weekIndex) => (
+            <View key={weekIndex} style={styles.weekRow}>
+              {week.map((date, dayIndex) => (
+                <CalendarDay key={dayIndex} date={date} completedDates={completedDates} />
+              ))}
+            </View>
           ))}
         </View>
       </View>
@@ -206,11 +214,13 @@ const styles = StyleSheet.create({
     color: SproutlyColors.textMuted,
   },
   grid: {
+    gap: 4,
+  },
+  weekRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
   },
   dayCell: {
-    width: `${100 / 7}%`,
+    flex: 1,
     alignItems: 'center',
     paddingVertical: 4,
   },

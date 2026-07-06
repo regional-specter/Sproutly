@@ -84,6 +84,48 @@ export async function createFirstPlant(params: {
   return createPlant(params);
 }
 
+export async function renamePlant(
+  plantId: string,
+  userId: string,
+  nickname: string,
+): Promise<Plant> {
+  const trimmedNickname = nickname.trim();
+  if (!trimmedNickname) {
+    throw new Error('Enter a plant name');
+  }
+
+  const { data, error } = await supabase
+    .from('plants')
+    .update({ nickname: trimmedNickname, updated_at: new Date().toISOString() })
+    .eq('id', plantId)
+    .eq('user_id', userId)
+    .eq('is_active', true)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deletePlant(plantId: string, userId: string): Promise<void> {
+  const { data, error } = await supabase
+    .from('plants')
+    .update({ is_active: false, updated_at: new Date().toISOString() })
+    .eq('id', plantId)
+    .eq('user_id', userId)
+    .eq('is_active', true)
+    .select('id')
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) throw new Error('Plant not found');
+
+  await supabase
+    .from('care_schedules')
+    .update({ is_active: false, updated_at: new Date().toISOString() })
+    .eq('plant_id', plantId);
+}
+
 export async function userHasPlants(userId: string): Promise<boolean> {
   const { count, error } = await supabase
     .from('plants')

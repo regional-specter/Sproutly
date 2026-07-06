@@ -6,6 +6,9 @@ import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -23,7 +26,10 @@ import {
   NotesMedicalIcon,
 } from '@/components/sproutly/figma-icons';
 import { SegmentedControl } from '@/components/sproutly/segmented-control';
+import { PrimaryButton } from '@/components/sproutly/primary-button';
+import { SproutlyTextInput } from '@/components/sproutly/sproutly-text-input';
 import { useAuth } from '@/contexts/auth-context';
+import { syncCareNotifications } from '@/lib/notifications';
 import {
   fetchPlantDetail,
   formatAddedLabel,
@@ -32,6 +38,7 @@ import {
   getPlantSpeciesLabel,
   type PlantDetailData,
 } from '@/lib/plant-detail';
+import { deletePlant, renamePlant } from '@/lib/plants';
 import { launchPlantCamera, performPlantHealthScan } from '@/lib/scans';
 import { FontFamily, LetterSpacing, Spacing, SproutlyColors } from '@/constants/theme';
 
@@ -75,6 +82,10 @@ export default function PlantDetailScreen() {
   const [detail, setDetail] = useState<PlantDetailData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isScanning, setIsScanning] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [isRenameVisible, setIsRenameVisible] = useState(false);
+  const [renameValue, setRenameValue] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<DetailTab>('care');
 
@@ -105,6 +116,80 @@ export default function PlantDetailScreen() {
       loadDetail();
     }, [loadDetail]),
   );
+
+  const handleRenameOpen = () => {
+    if (!detail?.plant || isScanning || isDeleting || isRenaming) return;
+    setRenameValue(detail.plant.nickname);
+    setIsRenameVisible(true);
+  };
+
+  const handleRenameClose = () => {
+    if (isRenaming) return;
+    setIsRenameVisible(false);
+  };
+
+  const handleRenameSave = async () => {
+    if (!user?.id || !detail?.plant || isRenaming) return;
+
+    const trimmedNickname = renameValue.trim();
+    if (!trimmedNickname) {
+      Alert.alert('Name your plant', 'Enter a nickname to rename this plant.');
+      return;
+    }
+
+    if (trimmedNickname === detail.plant.nickname) {
+      setIsRenameVisible(false);
+      return;
+    }
+
+    setIsRenaming(true);
+    try {
+      const updatedPlant = await renamePlant(detail.plant.id, user.id, trimmedNickname);
+      setDetail((current) =>
+        current ? { ...current, plant: { ...current.plant, nickname: updatedPlant.nickname } } : current,
+      );
+      setIsRenameVisible(false);
+      void syncCareNotifications(user.id);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to rename plant. Please try again.';
+      Alert.alert('Rename failed', message);
+    } finally {
+      setIsRenaming(false);
+    }
+  };
+
+  const handleDelete = () => {
+    if (!user?.id || !detail?.plant || isDeleting) return;
+
+    Alert.alert(
+      'Delete plant?',
+      `Are you sure you want to delete "${detail.plant.nickname}"? This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            void (async () => {
+              setIsDeleting(true);
+              try {
+                await deletePlant(detail.plant.id, user.id);
+                await refreshProfile();
+                void syncCareNotifications(user.id);
+                router.back();
+              } catch (err) {
+                const message =
+                  err instanceof Error ? err.message : 'Failed to delete plant. Please try again.';
+                Alert.alert('Delete failed', message);
+              } finally {
+                setIsDeleting(false);
+              }
+            })();
+          },
+        },
+      ],
+    );
+  };
 
   const handleScan = async () => {
     if (!user?.id || !detail?.plant || isScanning) return;
@@ -192,24 +277,60 @@ export default function PlantDetailScreen() {
               {species ? <Text style={styles.species}>{species}</Text> : null}
             </View>
 
-            <Pressable
-              accessibilityRole="button"
-              onPress={handleScan}
-              disabled={isScanning}
-              style={({ pressed }) => [
-                styles.scanButton,
-                pressed && !isScanning && styles.pressed,
-                isScanning && styles.scanButtonDisabled,
-              ]}>
-              {isScanning ? (
-                <ActivityIndicator size="small" color="#2563EB" />
-              ) : (
-                <CameraIcon size={16} color="#2563EB" />
-              )}
-              <Text style={styles.scanButtonText}>
-                {isScanning ? 'Scanning…' : 'Take a new Scan'}
-              </Text>
-            </Pressable>
+            <View style={styles.titleActions}>
+              <Pressable
+                accessibilityRole="button"
+                onPress={handleScan}
+                disabled={isScanning || isDeleting || isRenaming}
+                style={({ pressed }) => [
+                  styles.scanButton,
+                  pressed && !isScanning && !isDeleting && !isRenaming && styles.pressed,
+                  (isScanning || isDeleting || isRenaming) && styles.scanButtonDisabled,
+                ]}>
+                {isScanning ? (
+                  <ActivityIndicator size="small" color="#2563EB" />
+                ) : (
+                  <CameraIcon size={16} color="#2563EB" />
+                )}
+                <Text style={styles.scanButtonText}>
+                  {isScanning ? 'Scanning…' : 'Take a new Scan'}
+                </Text>
+              </Pressable>
+
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Rename plant"
+                onPress={handleRenameOpen}
+                disabled={isScanning || isDeleting || isRenaming}
+                style={({ pressed }) => [
+                  styles.renameButton,
+                  pressed && !isScanning && !isDeleting && !isRenaming && styles.pressed,
+                  (isScanning || isDeleting || isRenaming) && styles.renameButtonDisabled,
+                ]}>
+                <SymbolView name="pencil" size={14} tintColor={SproutlyColors.primary} />
+                <Text style={styles.renameButtonText}>Rename Plant</Text>
+              </Pressable>
+
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Delete plant"
+                onPress={handleDelete}
+                disabled={isScanning || isDeleting || isRenaming}
+                style={({ pressed }) => [
+                  styles.deleteButton,
+                  pressed && !isScanning && !isDeleting && !isRenaming && styles.pressed,
+                  (isScanning || isDeleting || isRenaming) && styles.deleteButtonDisabled,
+                ]}>
+                {isDeleting ? (
+                  <ActivityIndicator size="small" color="#DC2626" />
+                ) : (
+                  <SymbolView name="trash" size={14} tintColor="#DC2626" />
+                )}
+                <Text style={styles.deleteButtonText}>
+                  {isDeleting ? 'Deleting…' : 'Delete Plant'}
+                </Text>
+              </Pressable>
+            </View>
           </View>
 
           <StatusBadge status={plant.current_health_status} />
@@ -318,6 +439,47 @@ export default function PlantDetailScreen() {
           <Text style={styles.scanOverlayText}>Analyzing your plant…</Text>
         </View>
       ) : null}
+
+      <Modal
+        visible={isRenameVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={handleRenameClose}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.renameOverlay}>
+          <Pressable style={styles.renameBackdrop} onPress={handleRenameClose} />
+          <View style={styles.renameCard}>
+            <Text style={styles.renameTitle}>Rename plant</Text>
+            <Text style={styles.renameSubtitle}>Choose a new nickname for this plant.</Text>
+            <SproutlyTextInput
+              value={renameValue}
+              onChangeText={setRenameValue}
+              placeholder="Plant nickname"
+              autoFocus
+              editable={!isRenaming}
+              returnKeyType="done"
+              onSubmitEditing={() => void handleRenameSave()}
+            />
+            <View style={styles.renameActions}>
+              <Pressable
+                accessibilityRole="button"
+                onPress={handleRenameClose}
+                disabled={isRenaming}
+                style={({ pressed }) => [styles.renameCancel, pressed && !isRenaming && styles.pressed]}>
+                <Text style={styles.renameCancelText}>Cancel</Text>
+              </Pressable>
+              <PrimaryButton
+                label={isRenaming ? 'Saving…' : 'Save'}
+                variant="primary"
+                onPress={() => void handleRenameSave()}
+                disabled={isRenaming}
+                style={styles.renameSaveButton}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
@@ -409,6 +571,11 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: SproutlyColors.textMuted,
   },
+  titleActions: {
+    alignItems: 'flex-end',
+    gap: 8,
+    maxWidth: 150,
+  },
   scanButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -417,7 +584,47 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
     backgroundColor: '#EFF6FF',
-    maxWidth: 150,
+    alignSelf: 'stretch',
+  },
+  renameButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 12,
+    backgroundColor: '#E8F3E9',
+    alignSelf: 'stretch',
+  },
+  renameButtonDisabled: {
+    opacity: 0.7,
+  },
+  renameButtonText: {
+    flexShrink: 1,
+    fontFamily: FontFamily.interSemiBold,
+    fontSize: 12,
+    color: SproutlyColors.primary,
+  },
+  deleteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 12,
+    backgroundColor: '#FEE2E2',
+    alignSelf: 'stretch',
+  },
+  deleteButtonDisabled: {
+    opacity: 0.7,
+  },
+  deleteButtonText: {
+    flexShrink: 1,
+    fontFamily: FontFamily.interSemiBold,
+    fontSize: 12,
+    color: '#DC2626',
   },
   scanButtonDisabled: {
     opacity: 0.7,
@@ -558,5 +765,52 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.interSemiBold,
     fontSize: 16,
     color: SproutlyColors.white,
+  },
+  renameOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.four,
+  },
+  renameBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+  },
+  renameCard: {
+    borderRadius: 20,
+    backgroundColor: SproutlyColors.white,
+    padding: Spacing.four,
+    gap: Spacing.three,
+  },
+  renameTitle: {
+    fontFamily: FontFamily.interSemiBold,
+    fontSize: 18,
+    color: SproutlyColors.black,
+  },
+  renameSubtitle: {
+    fontFamily: FontFamily.interMedium,
+    fontSize: 14,
+    color: SproutlyColors.textMuted,
+  },
+  renameActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  renameCancel: {
+    flex: 1,
+    height: 52,
+    borderRadius: 999,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: SproutlyColors.surface,
+  },
+  renameCancelText: {
+    fontFamily: FontFamily.interMedium,
+    fontSize: 16,
+    color: SproutlyColors.black,
+  },
+  renameSaveButton: {
+    flex: 1,
+    maxWidth: undefined,
   },
 });

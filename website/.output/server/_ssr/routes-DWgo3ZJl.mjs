@@ -1,20 +1,20 @@
 import { n as __toESM } from "../_runtime.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { a as HeartPulse, c as ArrowRight, i as Leaf, n as Sparkles, o as Check, r as ScanLine, s as Bell, t as Star } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CSiBgi_U.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DWgo3ZJl.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var logo_default = "/assets/logo-D7hjP5xy.png";
 var logo_white_default = "/assets/logo-white-CPvaKe1A.png";
-var screen_home_default = "/assets/screen-home-B26i4hT9.png";
-var screen_detail_default = "/assets/screen-detail-5jecCy25.png";
+var bg_elements_default = "/assets/bg-elements-CrlOKLQt.png";
+var screen_home_default = "/assets/screen-home-FtY_xII_.png";
+var screen_detail_default = "/assets/screen-detail-IlZcxWcT.png";
 function Landing() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "min-h-screen bg-background text-foreground",
+		className: "min-h-screen bg-white text-foreground",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Nav, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hero, {}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBar, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Features, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(HowItWorks, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Preview, {}),
@@ -80,76 +80,76 @@ function Nav() {
 function Hero() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		id: "top",
-		className: "relative overflow-hidden",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-x-0 top-0 -z-10 h-[820px] bg-[radial-gradient(ellipse_60%_55%_at_50%_60%,color-mix(in_oklab,var(--brand-green)_28%,transparent)_0%,transparent_70%)]" }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute left-1/2 top-[380px] -z-10 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-[color-mix(in_oklab,var(--brand-green)_22%,transparent)] blur-3xl" }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mx-auto flex max-w-5xl flex-col items-center px-5 pt-16 pb-8 text-center md:pt-20",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1 text-xs font-medium text-secondary-foreground backdrop-blur",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5" }), "Early access — join the waitlist"]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-						className: "max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-[68px]",
-						children: [
-							"The AI plant doctor for your",
-							" ",
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-primary",
-								children: "home garden."
-							})
-						]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg",
-						children: "Snap a photo of any plant. Sproutly identifies the species, scores its health, and gives you a care routine that actually works."
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(WaitlistForm, { className: "mt-8 w-full max-w-md" }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mt-5 flex items-center gap-2 text-xs text-muted-foreground",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "flex -space-x-0.5",
-							children: [
-								0,
-								1,
-								2,
-								3,
-								4
-							].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { className: "h-3.5 w-3.5 fill-primary text-primary" }, i))
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Loved by 2,400+ plant parents on the waitlist" })]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "relative mt-14 w-full",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-end justify-center gap-2 sm:gap-6",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneShot, {
-									src: screen_home_default,
-									className: "hidden w-[200px] translate-y-10 rotate-[-8deg] sm:block md:w-[240px]"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneShot, {
-									src: screen_detail_default,
-									className: "w-[240px] md:w-[290px]"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneShot, {
-									src: screen_home_default,
-									className: "hidden w-[200px] translate-y-10 rotate-[8deg] sm:block md:w-[240px]"
-								})
-							]
-						})
-					})
-				]
+		className: "relative overflow-hidden bg-white",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "pointer-events-none absolute inset-x-0 top-[220px] z-0 sm:top-[240px] md:top-[260px]",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+				src: bg_elements_default,
+				alt: "",
+				"aria-hidden": true,
+				className: "w-full select-none"
 			})
-		]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "relative z-10 mx-auto flex max-w-5xl flex-col items-center px-5 pt-16 pb-8 text-center md:pt-20",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mb-6 inline-flex items-center gap-2 rounded-lg border border-[#b8dfc4] bg-[#CEEDD6] px-4 py-1.5 text-sm font-medium text-secondary-foreground",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4" }), "Early access — join the waitlist"]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+					className: "max-w-3xl text-4xl font-semibold leading-[1.05] tracking-[-0.06em] text-black sm:text-5xl md:text-6xl lg:text-[68px]",
+					children: [
+						"The AI plant doctor for your",
+						" ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-primary",
+							children: "home garden."
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg",
+					children: "Snap a photo of any plant. Sproutly identifies the species, scores its health, and gives you a care routine that actually works."
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(WaitlistForm, { className: "mt-8 w-full max-w-md" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-5 flex items-center gap-2 text-xs text-muted-foreground",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex -space-x-0.5",
+						children: [
+							0,
+							1,
+							2,
+							3,
+							4
+						].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { className: "h-3.5 w-3.5 fill-primary text-primary" }, i))
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Loved by 2,400+ plant parents on the waitlist" })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeroPhoneShowcase, {})
+			]
+		})]
+	});
+}
+function HeroPhoneShowcase() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "relative mx-auto mt-14 w-full max-w-3xl",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "relative flex min-h-[360px] items-end justify-center sm:min-h-[420px] md:min-h-[480px]",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "relative z-10 translate-y-2 sm:translate-y-4",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneShot, {
+					src: screen_home_default,
+					className: "w-[250px] sm:w-[290px] md:w-[330px]"
+				})
+			})
+		})
 	});
 }
 function PhoneShot({ src, className = "" }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 		src,
 		alt: "Sproutly app screen",
-		className: `block h-auto drop-shadow-[0_30px_40px_rgba(33,33,33,0.22)] ${className}`
+		className: `block h-auto drop-shadow-[0_30px_40px_rgba(0,0,0,0.22)] ${className}`
 	});
 }
 function WaitlistForm({ className = "" }) {
@@ -164,45 +164,23 @@ function WaitlistForm({ className = "" }) {
 		},
 		className,
 		children: status === "success" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex items-center justify-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-3.5 text-sm font-medium text-primary-dark",
+			className: "flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-5 py-3.5 text-sm font-medium text-primary-dark",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-4 w-4" }), "You're on the list — we'll be in touch soon."]
 		}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex flex-col gap-2 rounded-full border border-border bg-card p-1.5 shadow-sm sm:flex-row sm:pl-5",
+			className: "mx-auto flex w-full max-w-lg flex-col gap-2 rounded-xl border border-border/70 bg-white p-1.5 shadow-[0_1px_4px_rgba(0,0,0,0.06)] sm:flex-row sm:items-center sm:gap-0 sm:pl-4",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 				type: "email",
 				required: true,
 				value: email,
 				onChange: (e) => setEmail(e.target.value),
 				placeholder: "you@garden.com",
-				className: "w-full bg-transparent px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none sm:px-0"
+				className: "w-full bg-transparent px-3 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none sm:flex-1 sm:px-0 sm:py-0"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 				type: "submit",
-				className: "inline-flex items-center justify-center gap-1.5 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-transform hover:scale-[1.02]",
+				className: "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-[linear-gradient(180deg,#000000_0%,#4A4A4A_100%)] px-5 py-2.5 text-sm font-medium text-white transition-transform hover:scale-[1.02]",
 				children: ["Get early access", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
 			})]
 		})
-	});
-}
-function LogoBar() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "mx-auto max-w-5xl px-5 pb-16 pt-6",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-			className: "text-center text-xs uppercase tracking-[0.2em] text-muted-foreground",
-			children: "Built for every plant parent"
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm font-medium text-muted-foreground/80",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Houseplants" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-1 w-1 rounded-full bg-border" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Succulents" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-1 w-1 rounded-full bg-border" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Herbs" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-1 w-1 rounded-full bg-border" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Vegetables" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-1 w-1 rounded-full bg-border" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Balcony gardens" })
-			]
-		})]
 	});
 }
 function Features() {
@@ -271,7 +249,7 @@ function Features() {
 function HowItWorks() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 		id: "how",
-		className: "border-y border-border bg-secondary/40",
+		className: "border-y border-border bg-white",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "mx-auto max-w-6xl px-5 py-20 md:py-28",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -369,12 +347,12 @@ function Preview() {
 				]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "order-1 flex justify-center md:order-2",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "relative",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -inset-8 -z-10 rounded-[3rem] bg-gradient-to-br from-primary/20 to-transparent blur-2xl" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneShot, {
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneShot, {
 						src: screen_detail_default,
 						className: "w-[300px] md:w-[340px]"
-					})]
+					})
 				})
 			})]
 		})

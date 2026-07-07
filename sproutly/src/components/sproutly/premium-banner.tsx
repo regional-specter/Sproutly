@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -14,36 +15,22 @@ export function PremiumBanner({ onPress }: PremiumBannerProps) {
       accessibilityRole="button"
       onPress={onPress}
       style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}>
-      <LinearGradient
-        colors={[SproutlyColors.primary, SproutlyColors.secondary]}
-        start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 0.5 }}
-        style={styles.banner}>
+      <View style={styles.banner}>
+        <Image
+          source={require('@/assets/figma/footer-bg.png')}
+          style={styles.bannerBackground}
+          contentFit="cover"
+        />
+
         <View style={styles.copy}>
           <Text style={styles.title}>Get Premium</Text>
           <Text style={styles.subtitle}>Enjoy all the benefits of the app</Text>
         </View>
 
         <View style={styles.sparkles}>
-          <SymbolView name="sparkles" size={34} tintColor={SproutlyColors.white} weight="medium" />
-          <View style={styles.sparkleSmallTop}>
-            <SymbolView
-              name="sparkle"
-              size={18}
-              tintColor="rgba(255,255,255,0.85)"
-              weight="medium"
-            />
-          </View>
-          <View style={styles.sparkleSmallBottom}>
-            <SymbolView
-              name="sparkle"
-              size={14}
-              tintColor="rgba(255,255,255,0.7)"
-              weight="medium"
-            />
-          </View>
+          <SymbolView name="sparkles" size={52} tintColor={SproutlyColors.white} weight="medium" />
         </View>
-      </LinearGradient>
+      </View>
     </Pressable>
   );
 }
@@ -57,9 +44,16 @@ export function GetPremiumButton({ onPress }: GetPremiumButtonProps) {
     <Pressable
       accessibilityRole="button"
       onPress={onPress}
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}>
-      <SymbolView name="sparkles" size={14} tintColor={SproutlyColors.white} weight="medium" />
-      <Text style={styles.buttonLabel}>Get Premium</Text>
+      style={({ pressed }) => [styles.buttonWrapper, pressed && styles.pressed]}>
+      <LinearGradient
+        colors={['#377C4D', '#489E4B']}
+        locations={[0.25, 1]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={styles.button}>
+        <SymbolView name="sparkles" size={14} tintColor={SproutlyColors.white} weight="medium" />
+        <Text style={styles.buttonLabel}>Get Premium</Text>
+      </LinearGradient>
     </Pressable>
   );
 }
@@ -78,6 +72,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     overflow: 'hidden',
+    backgroundColor: SproutlyColors.primary,
+  },
+  bannerBackground: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 20,
   },
   copy: {
     flex: 1,
@@ -102,15 +101,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sparkleSmallTop: {
-    position: 'absolute',
-    top: 8,
-    right: 4,
-  },
-  sparkleSmallBottom: {
-    position: 'absolute',
-    bottom: 10,
-    left: 0,
+  buttonWrapper: {
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   button: {
     flexDirection: 'row',
@@ -118,8 +111,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 999,
-    backgroundColor: SproutlyColors.primary,
+    borderRadius: 8,
   },
   buttonLabel: {
     fontFamily: FontFamily.interSemiBold,

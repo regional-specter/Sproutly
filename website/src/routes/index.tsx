@@ -21,6 +21,7 @@ import featureScan from "@/assets/feature-scan.png";
 import featureHealth from "@/assets/feature-score.png";
 import featureCare from "@/assets/feature-care.png";
 import featureReminders from "@/assets/feature-reminder.png";
+import footerBg from "@/assets/footer-bg.png";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -355,16 +356,15 @@ function Footer() {
   ];
 
   return (
-    <footer className="bg-[#f7f7f7]" id="footer">
+    <footer className="" id="footer">
       <div className="mx-auto max-w-6xl px-5 pt-16 pb-12">
         {/* CTA banner */}
         <div className="relative overflow-hidden rounded-[2rem] px-6 py-14 text-center text-white sm:px-12 sm:py-16 md:py-20">
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(135deg, #5cb85c 0%, #3d8b40 35%, #7ec850 65%, #489e4b 100%)",
-            }}
+          <img
+            src={footerBg}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="pointer-events-none absolute -left-16 top-0 h-56 w-56 rounded-full bg-[#a8e063]/40 blur-3xl" />
           <div className="pointer-events-none absolute -right-10 top-8 h-64 w-64 rounded-full bg-[#f7d794]/30 blur-3xl" />

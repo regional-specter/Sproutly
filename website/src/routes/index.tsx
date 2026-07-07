@@ -202,29 +202,33 @@ function Features() {
       desc: "Point, snap, done. Our AI identifies the species and reads the leaves for stress signals in seconds.",
       image: featureScan,
       bg: "bg-[#4CA76B]",
+      textPosition: "top",
     },
     {
       title: "0–100 health score",
       desc: "A clear number that tells you if your plant is thriving, coasting, or asking for help right now.",
       image: featureHealth,
       bg: "bg-[#2F6B45]",
+      textPosition: "bottom",
     },
     {
       title: "Personalised care routines",
       desc: "Light, water, soil, feeding, temperature — a schedule that fits your specific plant, not a generic guide.",
       image: featureCare,
       bg: "bg-[#2F6B45]",
+      textPosition: "bottom",
     },
     {
       title: "Gentle reminders",
       desc: "Watering, misting and check-in nudges so nothing wilts while you're busy living your life.",
       image: featureReminders,
       bg: "bg-[#2B5E3D]",
+      textPosition: "top",
     },
   ];
 
   return (
-    <section id="features" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+    <section id="features" className="mx-auto max-w-7xl px-5 py-20 md:py-28">
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
           Features
@@ -239,18 +243,36 @@ function Features() {
       </div>
 
       <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {items.map(({ title, desc, image, bg }) => (
+        {items.map(({ title, desc, image, bg, textPosition }) => (
           <div
             key={title}
-            className={`relative flex aspect-[411/413] flex-col overflow-hidden rounded-[17px] p-6 text-white ${bg}`}
+            className={`relative flex aspect-[450/530] flex-col overflow-hidden rounded-[17px] p-6 text-white ${bg}`}
           >
-            <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-white/80">{desc}</p>
-            <img
-              src={image}
-              alt={title}
-              className="pointer-events-none absolute inset-x-0 bottom-0 w-full select-none"
-            />
+            {textPosition === "top" && (
+              <>
+                <p className="text-lg font-semibold tracking-tight">{title}</p>
+                <p className="text-sm leading-relaxed text-white/80">{desc}</p>
+                <img
+                  src={image}
+                  alt={title}
+                  className="pointer-events-none absolute inset-x-0 bottom-0 w-full select-none"
+                />
+              </>
+            )}
+
+            {textPosition === "bottom" && (
+              <>
+                <img
+                  src={image}
+                  alt={title}
+                  className="pointer-events-none absolute inset-x-0 top-0 w-full select-none"
+                />
+                <div className="relative z-10 mt-auto">
+                  <p className="text-lg font-semibold tracking-tight">{title}</p>
+                  <p className="text-sm leading-tight text-white/80">{desc}</p>
+                </div>
+              </>
+            )}
           </div>
         ))}
       </div>

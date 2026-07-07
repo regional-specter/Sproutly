@@ -32,7 +32,6 @@ function Landing() {
       <Nav />
       <Hero />
       <Features />
-      <HowItWorks />
       <Preview />
       <Footer />
     </div>
@@ -229,14 +228,11 @@ function Features() {
 
   return (
     <section id="features" className="mx-auto max-w-7xl px-5 py-20 md:py-28">
-      <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
-          Features
-        </p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl md:text-[44px]">
+      <div className="max-w-2xl text-left">
+        <h1 className="mt-3 whitespace-nowrap text-3xl font-semibold tracking-tighter sm:text-4xl md:text-[44px]">
           Everything your plants wish you knew.
-        </h2>
-        <p className="mt-4 text-muted-foreground">
+        </h1>
+        <p className="mt-4 tracking-tight text-lg leading-normal max-w-2xl text-muted-foreground">
           Sproutly turns your camera into a plant doctor, gardener and calendar —
           all in one calm, quiet app.
         </p>
@@ -275,55 +271,6 @@ function Features() {
             )}
           </div>
         ))}
-      </div>
-    </section>
-  );
-}
-
-function HowItWorks() {
-  const steps = [
-    {
-      n: "01",
-      title: "Snap a photo",
-      desc: "Open Sproutly and take a quick photo of the plant you want to check on.",
-    },
-    {
-      n: "02",
-      title: "Get an AI diagnosis",
-      desc: "In seconds you'll see the species, a health score, and what's going right or wrong.",
-    },
-    {
-      n: "03",
-      title: "Follow the routine",
-      desc: "Save the plant to your garden and let gentle reminders keep it thriving over time.",
-    },
-  ];
-
-  return (
-    <section id="how" className="border-y border-border bg-white">
-      <div className="mx-auto max-w-6xl px-5 py-20 md:py-28">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
-            How it works
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl md:text-[44px]">
-            Three taps to a healthier home garden.
-          </h2>
-        </div>
-
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {steps.map((s) => (
-            <div key={s.n} className="rounded-3xl border border-border bg-card p-7">
-              <span className="text-sm font-semibold text-primary">{s.n}</span>
-              <h3 className="mt-3 text-xl font-semibold tracking-tight">
-                {s.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {s.desc}
-              </p>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

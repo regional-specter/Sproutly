@@ -11,6 +11,11 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { embedImagePath, resolveAbsoluteUrl } from "../lib/site-url";
+
+const siteTitle = "Sproutly — AI plant care for happier home gardens";
+const siteDescription =
+  "Snap a photo. Get an instant health score, species ID, and a care schedule tailored to every plant in your home.";
 
 function NotFoundComponent() {
   return (
@@ -73,7 +78,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
+  head: async () => {
+    const [imageUrl, pageUrl] = await Promise.all([
+      resolveAbsoluteUrl(embedImagePath),
+      resolveAbsoluteUrl("/"),
+    ]);
+
+    return {
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -83,14 +94,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Sproutly scans your plants, diagnoses their health, and builds a personalised care routine. Join the waitlist for early access.",
       },
-      { property: "og:title", content: "Sproutly — AI plant care for happier home gardens" },
-      {
-        property: "og:description",
-        content:
-          "Snap a photo. Get an instant health score, species ID, and a care schedule tailored to every plant in your home.",
-      },
+      { property: "og:title", content: siteTitle },
+      { property: "og:description", content: siteDescription },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: pageUrl },
+      { property: "og:site_name", content: "Sproutly" },
+      { property: "og:image", content: imageUrl },
+      { property: "og:image:width", content: "986" },
+      { property: "og:image:height", content: "398" },
+      { property: "og:image:type", content: "image/jpeg" },
+      {
+        property: "og:image:alt",
+        content: "Sproutly — The AI plant doctor for your home garden",
+      },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: siteTitle },
+      { name: "twitter:description", content: siteDescription },
+      { name: "twitter:image", content: imageUrl },
+      {
+        name: "twitter:image:alt",
+        content: "Sproutly — The AI plant doctor for your home garden",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -102,7 +126,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap",
       },
     ],
-  }),
+    };
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

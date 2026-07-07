@@ -281,5 +281,32 @@ function errorResponse(error, debug, errHeaders) {
 		headers
 	});
 }
+function getRequestHost(event, opts = {}) {
+	if (opts.xForwardedHost) {
+		const xForwardedHost = (event.req.headers.get("x-forwarded-host") || "").split(",").shift()?.trim();
+		if (xForwardedHost) return xForwardedHost;
+	}
+	return event.req.headers.get("host") || "";
+}
+function getRequestProtocol(event, opts = {}) {
+	if (opts.xForwardedProto !== false) {
+		const forwardedProto = event.req.headers.get("x-forwarded-proto");
+		if (forwardedProto === "https") return "https";
+		if (forwardedProto === "http") return "http";
+	}
+	return (event.url || new URL(event.req.url)).protocol.slice(0, -1);
+}
+function getRequestURL(event, opts = {}) {
+	const url = new URL(event.url || event.req.url);
+	url.protocol = getRequestProtocol(event, opts);
+	if (opts.xForwardedHost) {
+		const host = getRequestHost(event, opts);
+		if (host) {
+			url.host = host;
+			if (!/:\d+$/.test(host)) url.port = "";
+		}
+	}
+	return url;
+}
 //#endregion
-export { toResponse as n, H3Event as t };
+export { getRequestURL as n, toResponse as r, H3Event as t };

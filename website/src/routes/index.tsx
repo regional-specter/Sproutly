@@ -48,8 +48,8 @@ function Nav() {
         </a>
         <nav className="hidden items-center gap-7 text-sm font-medium text-background/70 md:flex">
           <a href="#features" className="transition-colors hover:text-background">Features</a>
-          <a href="#how" className="transition-colors hover:text-background">How it works</a>
           <a href="#preview" className="transition-colors hover:text-background">Preview</a>
+          <a href="#footer" className="transition-colors hover:text-background">More</a>
         </nav>
         <div className="flex items-center gap-2">
           <a
@@ -331,16 +331,13 @@ function Footer() {
   const companyLinks = [
     { label: "Home", href: "#top" },
     { label: "About us", href: "#features" },
-    { label: "Pricing", href: "#waitlist" },
-    { label: "Blog", href: "#preview" },
-    { label: "Blog Details", href: "#preview" },
+    { label: "Pricing", href: "#top" },
   ];
 
   const productLinks = [
     { label: "Features", href: "#features" },
-    { label: "Careers", href: "#waitlist" },
-    { label: "How it works", href: "#how" },
-    { label: "Contact", href: "#waitlist" },
+    { label: "App Preview", href: "#preview" },
+    { label: "Contact", href: "#top" },
   ];
 
   const legalLinks = [
@@ -358,7 +355,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="bg-[#f7f7f7]">
+    <footer className="bg-[#f7f7f7]" id="footer">
       <div className="mx-auto max-w-6xl px-5 pt-16 pb-12">
         {/* CTA banner */}
         <div className="relative overflow-hidden rounded-[2rem] px-6 py-14 text-center text-white sm:px-12 sm:py-16 md:py-20">
@@ -375,16 +372,16 @@ function Footer() {
           <div className="pointer-events-none absolute -bottom-10 right-1/4 h-40 w-56 rounded-full bg-[#b8e994]/35 blur-3xl" />
 
           <div className="relative z-10">
-            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl md:text-[42px] md:leading-[1.1]">
+            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tighter sm:text-4xl md:text-[42px] md:leading-[1.1]">
               Let AI take the guesswork out of plant care
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
+            <p className="mx-auto mt-4 max-w-xl text-base tracking-tighter leading-normal text-white/90 sm:text-lg">
               From species ID and health scores to watering schedules and gentle
               reminders — automate the plant care your home garden shouldn&apos;t
               depend on guesswork for.
             </p>
             <a
-              href="#waitlist"
+              href="#top"
               className="mt-8 inline-flex items-center gap-1 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-transform hover:scale-[1.02]"
             >
               Get early access
@@ -405,7 +402,7 @@ function Footer() {
               AI-powered plant care designed to help home gardeners identify,
               diagnose, and nurture every plant effortlessly and fast.
             </p>
-            <div className="mt-5 flex items-center gap-4">
+            <div className="mt-5 flex items-center gap-3">
               {socialLinks.map(({ icon: Icon, label, href }) => (
                 <a
                   key={label}
@@ -422,7 +419,7 @@ function Footer() {
           {/* Company */}
           <div>
             <h3 className="text-sm font-semibold text-foreground">Company</h3>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-4 space-y-1">
               {companyLinks.map(({ label, href }) => (
                 <li key={label}>
                   <a
@@ -439,7 +436,7 @@ function Footer() {
           {/* Product */}
           <div>
             <h3 className="text-sm font-semibold text-foreground">Product</h3>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-4 space-y-1">
               {productLinks.map(({ label, href }) => (
                 <li key={label}>
                   <a
@@ -451,15 +448,6 @@ function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-sm font-semibold text-foreground">Newsletter</h3>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Get tips, product updates, and insights on growing smarter with AI.
-            </p>
-            <WaitlistForm formId="newsletter" className="mt-4 w-full" />
           </div>
         </div>
 

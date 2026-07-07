@@ -264,6 +264,10 @@ export type Database = {
         Args: { p_reminder_id: string; p_user_id: string };
         Returns: string;
       };
+      delete_user: {
+        Args: Record<string, never>;
+        Returns: undefined;
+      };
     };
     Enums: {
       plant_category: PlantCategory;

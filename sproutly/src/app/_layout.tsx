@@ -53,6 +53,7 @@ export default function RootLayout() {
         <Stack.Screen name="(onboarding)" />
         <Stack.Screen name="(app)" />
         <Stack.Screen name="plant/[id]" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="settings/personal-details" options={{ animation: 'slide_from_right' }} />
       </Stack>
     </AuthProvider>
   );

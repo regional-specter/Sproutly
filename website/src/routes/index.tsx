@@ -94,21 +94,12 @@ function Hero() {
           <span className="text-primary">home garden.</span>
         </h1>
 
-        <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+        <p className="mt-6 max-w-xl text-base leading-normal text-muted-foreground sm:text-lg">
           Snap a photo of any plant. Sproutly identifies the species, scores its
           health, and gives you a care routine that actually works.
         </p>
 
         <WaitlistForm className="mt-8 w-full max-w-md" />
-
-        <div className="mt-5 flex items-center gap-2 text-xs text-muted-foreground">
-          <div className="flex -space-x-0.5">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <Star key={i} className="h-3.5 w-3.5 fill-primary text-primary" />
-            ))}
-          </div>
-          <span>Loved by 2,400+ plant parents on the waitlist</span>
-        </div>
 
         <HeroPhoneShowcase />
       </div>
@@ -118,7 +109,7 @@ function Hero() {
 
 function HeroPhoneShowcase() {
   return (
-    <div className="relative mx-auto mt-14 w-full max-w-3xl">
+    <div className="relative mx-auto mt-5 w-full max-w-3xl">
       <div className="relative flex min-h-[360px] items-end justify-center sm:min-h-[420px] md:min-h-[480px]">
         <div className="relative z-10 translate-y-2 sm:translate-y-4">
           <PhoneShot
@@ -142,7 +133,7 @@ function PhoneShot({
     <img
       src={src}
       alt="Sproutly app screen"
-      className={`block h-auto drop-shadow-[0_30px_40px_rgba(0,0,0,0.22)] ${className}`}
+      className={`h-auto${className}`}
     />
   );
 }
@@ -228,7 +219,7 @@ function Features() {
   ];
 
   return (
-    <section id="features" className="mx-auto max-w-7xl px-5 py-20 md:py-28">
+    <section id="features" className="mx-auto max-w-7xl px-5 py-5 md:py-15">
       <div className="max-w-2xl text-left">
         <h1 className="mt-3 whitespace-nowrap text-3xl font-semibold tracking-tighter sm:text-4xl md:text-[44px]">
           Everything your plants wish you knew.

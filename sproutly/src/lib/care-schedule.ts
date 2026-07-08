@@ -96,8 +96,23 @@ export async function completeCareReminder(reminderId: string, userId: string): 
     p_user_id: userId,
   });
 
-  if (error) throw error;
-  return data as string;
+  if (!error) return data as string;
+
+  const isMissingCompletedAtColumn =
+    error.code === '42703' && error.message?.toLowerCase().includes('completed_at');
+
+  if (!isMissingCompletedAtColumn) throw error;
+
+  const completedAt = new Date().toISOString();
+  const { error: updateError } = await supabase
+    .from('reminders')
+    .update({ status: 'completed' })
+    .eq('id', reminderId)
+    .eq('user_id', userId);
+
+  if (updateError) throw updateError;
+
+  return completedAt;
 }
 
 export async function fetchTodayTasks(userId: string): Promise<CareTask[]> {
@@ -158,11 +173,11 @@ export async function fetchCompletedCareDates(
   const [remindersResult, logsResult] = await Promise.all([
     supabase
       .from('reminders')
-      .select('completed_at')
+      .select('due_at')
       .eq('user_id', userId)
       .eq('status', 'completed')
-      .gte('completed_at', start.toISOString())
-      .lte('completed_at', end.toISOString()),
+      .gte('due_at', start.toISOString())
+      .lte('due_at', end.toISOString()),
     plantIds.length > 0
       ? supabase
           .from('plant_logs')
@@ -180,8 +195,8 @@ export async function fetchCompletedCareDates(
   const dates = new Set<string>();
 
   for (const row of remindersResult.data ?? []) {
-    if (row.completed_at) {
-      dates.add(toDateKey(new Date(row.completed_at)));
+    if (row.due_at) {
+      dates.add(toDateKey(new Date(row.due_at)));
     }
   }
 

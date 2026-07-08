@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dayCompleted: {
-    backgroundColor: SproutlyColors.primary,
+    backgroundColor: SproutlyColors.healthGreen,
   },
   dayPending: {
     backgroundColor: '#F3F4F6',

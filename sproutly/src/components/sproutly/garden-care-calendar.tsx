@@ -1,4 +1,4 @@
-import { SymbolView } from 'expo-symbols';
+import { SymbolView } from '@/components/sproutly/symbol-view';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { StethoscopeIcon } from '@/components/sproutly/figma-icons';

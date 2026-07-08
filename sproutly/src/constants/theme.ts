@@ -43,11 +43,15 @@ export const FontFamily = {
   gabaritoSemiBold: 'Gabarito_600SemiBold',
 } as const;
 
-export const LetterSpacing = {
-  body: -0.5,
-  headingSm: -1.5,
-  headingLg: -3,
-} as const;
+// Android font rendering tends to look “squeezed” with negative letter-spacing.
+// Keep iOS/web design intent, but make Android spacing neutral.
+export const LetterSpacing =
+  Platform.select({
+    ios: { body: -0.5, headingSm: -1.5, headingLg: -3 } as const,
+    web: { body: -0.5, headingSm: -1.5, headingLg: -3 } as const,
+    android: { body: 0, headingSm: 0, headingLg: 0 } as const,
+    default: { body: -0.5, headingSm: -1.5, headingLg: -3 } as const,
+  }) ?? { body: -0.5, headingSm: -1.5, headingLg: -3 };
 
 export const Fonts = Platform.select({
   ios: {

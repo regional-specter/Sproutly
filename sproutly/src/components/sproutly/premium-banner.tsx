@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SymbolView } from 'expo-symbols';
+import { SymbolView } from '@/components/sproutly/symbol-view';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { FontFamily, LetterSpacing, Spacing, SproutlyColors } from '@/constants/theme';

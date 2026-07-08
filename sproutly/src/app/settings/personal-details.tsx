@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { type Href, router } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
+import { SymbolView } from '@/components/sproutly/symbol-view';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,

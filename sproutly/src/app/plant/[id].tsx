@@ -1,7 +1,7 @@
 import { useFocusEffect } from 'expo-router';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
+import { SymbolView } from '@/components/sproutly/symbol-view';
 import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,

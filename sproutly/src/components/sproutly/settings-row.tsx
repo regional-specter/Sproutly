@@ -1,4 +1,4 @@
-import { SymbolView, type SymbolViewProps } from 'expo-symbols';
+import { SymbolView, type SymbolViewProps } from '@/components/sproutly/symbol-view';
 import { Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 
 import { FontFamily, LetterSpacing, Spacing, SproutlyColors } from '@/constants/theme';

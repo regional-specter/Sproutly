@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useState, type FormEvent } from "react";
 import {
   Sparkles,
   ArrowRight,
   ChevronRight,
   Check,
-  Star,
   Facebook,
   Linkedin,
   Instagram,
@@ -22,6 +22,7 @@ import featureHealth from "@/assets/feature-score.png";
 import featureCare from "@/assets/feature-care.png";
 import featureReminders from "@/assets/feature-reminder.png";
 import footerBg from "@/assets/footer-bg.png";
+import { joinWaitlist } from "@/lib/waitlist.functions";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -145,41 +146,73 @@ function WaitlistForm({
   className?: string;
   formId?: string;
 }) {
+  const join = useServerFn(joinWaitlist);
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
+    "idle",
+  );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!email || status === "loading") return;
+
+    setStatus("loading");
+    setErrorMessage(null);
+
+    try {
+      await join({ data: { email } });
+      setStatus("success");
+      setEmail("");
+    } catch (err) {
+      const message =
+        err instanceof Error && err.message
+          ? err.message
+          : "Something went wrong. Please try again.";
+      setErrorMessage(message);
+      setStatus("error");
+    }
+  }
 
   return (
-    <form
-      id={formId}
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!email) return;
-        setStatus("success");
-      }}
-      className={className}
-    >
+    <form id={formId} onSubmit={handleSubmit} className={className}>
       {status === "success" ? (
         <div className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-5 py-3.5 text-sm font-medium text-primary-dark">
           <Check className="h-4 w-4" />
           You're on the list — we'll be in touch soon.
         </div>
       ) : (
-        <div className="mx-auto flex w-full max-w-lg flex-col gap-2 rounded-xl border border-border/70 bg-white p-1.5 shadow-[0_1px_4px_rgba(0,0,0,0.06)] sm:flex-row sm:items-center sm:gap-0 sm:pl-4">
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@garden.com"
-            className="w-full bg-transparent px-3 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none sm:flex-1 sm:px-0 sm:py-0"
-          />
-          <button
-            type="submit"
-            className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-[linear-gradient(180deg,#000000_0%,#4A4A4A_100%)] px-5 py-2.5 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
-          >
-            Get early access
-            <ArrowRight className="h-3.5 w-3.5" />
-          </button>
+        <div className="space-y-2">
+          <div className="mx-auto flex w-full max-w-lg flex-col gap-2 rounded-xl border border-border/70 bg-white p-1.5 shadow-[0_1px_4px_rgba(0,0,0,0.06)] sm:flex-row sm:items-center sm:gap-0 sm:pl-4">
+            <input
+              type="email"
+              name="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (status === "error") {
+                  setStatus("idle");
+                  setErrorMessage(null);
+                }
+              }}
+              placeholder="you@garden.com"
+              disabled={status === "loading"}
+              className="w-full bg-transparent px-3 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none disabled:opacity-60 sm:flex-1 sm:px-0 sm:py-0"
+            />
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-[linear-gradient(180deg,#000000_0%,#4A4A4A_100%)] px-5 py-2.5 text-sm font-medium text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:scale-100"
+            >
+              {status === "loading" ? "Joining…" : "Get early access"}
+              {status !== "loading" && <ArrowRight className="h-3.5 w-3.5" />}
+            </button>
+          </div>
+          {errorMessage ? (
+            <p className="text-center text-sm text-red-600">{errorMessage}</p>
+          ) : null}
         </div>
       )}
     </form>

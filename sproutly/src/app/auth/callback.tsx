@@ -1,13 +1,15 @@
 import * as Linking from 'expo-linking';
 import { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { type Href, useRouter } from 'expo-router';
 
+import { useAuth } from '@/contexts/auth-context';
 import { createSessionFromUrl } from '@/lib/auth';
 import { SproutlyColors } from '@/constants/theme';
 
 export default function AuthCallbackScreen() {
   const router = useRouter();
+  const { refreshProfile } = useAuth();
 
   useEffect(() => {
     async function handleCallback() {
@@ -15,13 +17,15 @@ export default function AuthCallbackScreen() {
       if (initialUrl) {
         await createSessionFromUrl(initialUrl);
       }
-      router.replace('/(onboarding)/profile');
+
+      const { needsOnboarding } = await refreshProfile();
+      router.replace((needsOnboarding ? '/(onboarding)/profile' : '/(app)/home') as Href);
     }
 
     handleCallback().catch(() => {
-      router.replace('/(auth)/welcome');
+      router.replace('/(auth)/welcome' as Href);
     });
-  }, [router]);
+  }, [refreshProfile, router]);
 
   return (
     <View style={styles.container}>

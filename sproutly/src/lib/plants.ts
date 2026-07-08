@@ -137,7 +137,7 @@ export async function userHasPlants(userId: string): Promise<boolean> {
   return (count ?? 0) > 0;
 }
 
-export function profileNeedsOnboarding(profile: Profile | null, hasPlants: boolean): boolean {
-  if (!profile?.full_name?.trim()) return true;
-  return !hasPlants;
+export function profileNeedsOnboarding(profile: Profile | null, _hasPlants = false): boolean {
+  // Returning users with a saved name skip onboarding, even if they have no plants.
+  return !profile?.full_name?.trim();
 }

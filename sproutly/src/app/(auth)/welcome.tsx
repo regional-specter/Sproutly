@@ -17,18 +17,14 @@ export default function WelcomeScreen() {
   const { refreshProfile } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const goToOnboarding = () => {
-    router.replace('/(onboarding)/profile' as Href);
-  };
-
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
       const { cancelled, session } = await signInWithGoogle();
       if (cancelled || !session) return;
 
-      await refreshProfile();
-      goToOnboarding();
+      const { needsOnboarding } = await refreshProfile();
+      router.replace((needsOnboarding ? '/(onboarding)/profile' : '/(app)/home') as Href);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Google sign-in failed. Please try again.';
       Alert.alert('Sign in failed', message);

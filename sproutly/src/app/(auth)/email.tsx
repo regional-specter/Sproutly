@@ -55,8 +55,8 @@ export default function EmailAuthScreen() {
         await signInWithEmail(email, password);
       }
 
-      await refreshProfile();
-      router.replace('/(onboarding)/profile' as Href);
+      const { needsOnboarding } = await refreshProfile();
+      router.replace((needsOnboarding ? '/(onboarding)/profile' : '/(app)/home') as Href);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Something went wrong. Please try again.';
       Alert.alert(isSignUp ? 'Sign up failed' : 'Sign in failed', message);

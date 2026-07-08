@@ -15,7 +15,7 @@ type AuthContextValue = {
   profile: Profile | null;
   isLoading: boolean;
   needsOnboarding: boolean;
-  refreshProfile: () => Promise<void>;
+  refreshProfile: () => Promise<{ needsOnboarding: boolean }>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -36,9 +36,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const refreshProfile = useCallback(async () => {
-    if (!session?.user.id) return;
-    await loadUserData(session.user.id);
-  }, [loadUserData, session?.user.id]);
+    let userId = session?.user.id;
+    if (!userId) {
+      const { data } = await supabase.auth.getSession();
+      userId = data.session?.user.id;
+    }
+
+    if (!userId) {
+      return { needsOnboarding: true };
+    }
+
+    const [nextProfile, plantsExist] = await Promise.all([
+      fetchProfile(userId),
+      userHasPlants(userId),
+    ]);
+    setProfile(nextProfile);
+    setHasPlants(plantsExist);
+
+    return { needsOnboarding: profileNeedsOnboarding(nextProfile, plantsExist) };
+  }, [session?.user.id]);
 
   useEffect(() => {
     let mounted = true;

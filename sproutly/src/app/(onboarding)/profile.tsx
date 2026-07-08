@@ -18,7 +18,7 @@ import { ImageUploadCircle } from '@/components/sproutly/image-upload-circle';
 import { PrimaryButton } from '@/components/sproutly/primary-button';
 import { SproutlyTextInput } from '@/components/sproutly/sproutly-text-input';
 import { useAuth } from '@/contexts/auth-context';
-import { createFirstPlant, updateProfileName, uploadPlantImage } from '@/lib/plants';
+import { createFirstPlant, updateProfileName, uploadPlantImage, userHasPlants } from '@/lib/plants';
 import { FontFamily, LetterSpacing, Spacing, SproutlyColors } from '@/constants/theme';
 
 async function pickImage(source: 'camera' | 'gallery'): Promise<string | null> {
@@ -58,17 +58,24 @@ async function pickImage(source: 'camera' | 'gallery'): Promise<string | null> {
 export default function ProfileSetupScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { user, refreshProfile, isLoading } = useAuth();
+  const { user, refreshProfile, isLoading, needsOnboarding } = useAuth();
   const [name, setName] = useState('');
   const [plantImageUri, setPlantImageUri] = useState<string | null>(null);
   const [pickerVisible, setPickerVisible] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (isLoading) return;
+
+    if (!user) {
       router.replace('/(auth)/welcome' as Href);
+      return;
     }
-  }, [isLoading, router, user]);
+
+    if (!needsOnboarding) {
+      router.replace('/(app)/home' as Href);
+    }
+  }, [isLoading, needsOnboarding, router, user]);
 
   const handleContinue = async () => {
     if (!user) {
@@ -87,16 +94,21 @@ export default function ProfileSetupScreen() {
     try {
       await updateProfileName(user.id, trimmedName);
 
-      let coverImageUrl: string | null = null;
-      if (plantImageUri) {
-        coverImageUrl = await uploadPlantImage(user.id, plantImageUri);
-      }
+      // Only create the default first plant during real first-time setup,
+      // never when a returning user somehow lands here again.
+      const alreadyHasPlants = await userHasPlants(user.id);
+      if (!alreadyHasPlants) {
+        let coverImageUrl: string | null = null;
+        if (plantImageUri) {
+          coverImageUrl = await uploadPlantImage(user.id, plantImageUri);
+        }
 
-      await createFirstPlant({
-        userId: user.id,
-        nickname: `${trimmedName.split(' ')[0]}'s Plant`,
-        coverImageUrl,
-      });
+        await createFirstPlant({
+          userId: user.id,
+          nickname: `${trimmedName.split(' ')[0]}'s Plant`,
+          coverImageUrl,
+        });
+      }
 
       await refreshProfile();
       router.push('/(onboarding)/success' as Href);

@@ -1,4 +1,4 @@
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, type Href } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
@@ -6,6 +6,7 @@ import { AppScreenLayout } from '@/components/sproutly/app-screen-layout';
 import { GardenCareCalendar } from '@/components/sproutly/garden-care-calendar';
 import { FireAltIcon, LeafIcon } from '@/components/sproutly/figma-icons';
 import { LevelProgressRing } from '@/components/sproutly/level-progress-ring';
+import { NotificationsSheet } from '@/components/sproutly/notifications-sheet';
 import { TodayTasksSection } from '@/components/sproutly/today-tasks';
 import { useAuth } from '@/contexts/auth-context';
 import { fetchAnalysisScreenData, type AnalysisScreenData } from '@/lib/analysis';
@@ -19,6 +20,7 @@ export default function AnalysisScreen() {
   const [data, setData] = useState<AnalysisScreenData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notificationsVisible, setNotificationsVisible] = useState(false);
 
   const firstName = getFirstName(profile?.full_name, profile?.email);
 
@@ -86,7 +88,9 @@ export default function AnalysisScreen() {
   );
 
   return (
-    <AppScreenLayout>
+    <AppScreenLayout
+      onNotificationPress={() => setNotificationsVisible(true)}
+      onProfilePress={() => router.push('/(app)/settings' as Href)}>
       {isLoading ? (
         <View style={styles.centeredState}>
           <ActivityIndicator color={SproutlyColors.primary} />
@@ -141,6 +145,24 @@ export default function AnalysisScreen() {
             />
           ) : null}
         </>
+      ) : null}
+
+      {user?.id ? (
+        <NotificationsSheet
+          visible={notificationsVisible}
+          userId={user.id}
+          onClose={() => setNotificationsVisible(false)}
+          onTaskCompleted={(taskId) => {
+            setData((prev) => {
+              if (!prev) return prev;
+              return {
+                ...prev,
+                todayTasks: prev.todayTasks.filter((task) => task.id !== taskId),
+              };
+            });
+            void loadData();
+          }}
+        />
       ) : null}
     </AppScreenLayout>
   );

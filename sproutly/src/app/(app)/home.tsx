@@ -13,6 +13,7 @@ import {
   NotesMedicalIcon,
 } from '@/components/sproutly/figma-icons';
 import { LevelProgressRing } from '@/components/sproutly/level-progress-ring';
+import { NotificationsSheet } from '@/components/sproutly/notifications-sheet';
 import { PrimaryButton } from '@/components/sproutly/primary-button';
 import { useAuth } from '@/contexts/auth-context';
 import {
@@ -85,6 +86,7 @@ export default function HomeScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [addPlantVisible, setAddPlantVisible] = useState(false);
+  const [notificationsVisible, setNotificationsVisible] = useState(false);
 
   const firstName = getFirstName(profile?.full_name, profile?.email);
 
@@ -124,7 +126,9 @@ export default function HomeScreen() {
   }, [loadHomeData, refreshProfile]);
 
   return (
-    <AppScreenLayout>
+    <AppScreenLayout
+      onNotificationPress={() => setNotificationsVisible(true)}
+      onProfilePress={() => router.push('/(app)/settings' as Href)}>
       {isLoading ? (
         <View style={styles.centeredState}>
           <ActivityIndicator color={SproutlyColors.primary} />
@@ -236,12 +240,19 @@ export default function HomeScreen() {
       ) : null}
 
       {user?.id ? (
-        <AddPlantSheet
-          visible={addPlantVisible}
-          userId={user.id}
-          onClose={() => setAddPlantVisible(false)}
-          onPlantCreated={handlePlantCreated}
-        />
+        <>
+          <AddPlantSheet
+            visible={addPlantVisible}
+            userId={user.id}
+            onClose={() => setAddPlantVisible(false)}
+            onPlantCreated={handlePlantCreated}
+          />
+          <NotificationsSheet
+            visible={notificationsVisible}
+            userId={user.id}
+            onClose={() => setNotificationsVisible(false)}
+          />
+        </>
       ) : null}
     </AppScreenLayout>
   );

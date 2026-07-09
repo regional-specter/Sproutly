@@ -1,13 +1,13 @@
 import {
   Gabarito_500Medium,
   Gabarito_600SemiBold,
-  useFonts as useGabaritoFonts,
 } from '@expo-google-fonts/gabarito';
 import {
   Inter_500Medium,
+  Inter_500Medium_Italic,
   Inter_600SemiBold,
-  useFonts as useInterFonts,
 } from '@expo-google-fonts/inter';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -18,24 +18,27 @@ import { SproutlyColors } from '@/constants/theme';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [interLoaded] = useInterFonts({
+  const [fontsLoaded, fontError] = useFonts({
     Inter_500Medium,
+    Inter_500Medium_Italic,
     Inter_600SemiBold,
-  });
-  const [gabaritoLoaded] = useGabaritoFonts({
     Gabarito_500Medium,
     Gabarito_600SemiBold,
   });
 
-  const fontsLoaded = interLoaded && gabaritoLoaded;
-
   useEffect(() => {
-    if (fontsLoaded) {
+    if (fontsLoaded || fontError) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, fontError]);
 
-  if (!fontsLoaded) {
+  useEffect(() => {
+    if (__DEV__ && fontError) {
+      console.error('Failed to load fonts:', fontError);
+    }
+  }, [fontError]);
+
+  if (!fontsLoaded && !fontError) {
     return null;
   }
 

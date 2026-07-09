@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, type TextInputProps } from 'react-native';
+import { Platform, StyleSheet, TextInput, type TextInputProps } from 'react-native';
 
 import { FontFamily, LetterSpacing, SproutlyColors } from '@/constants/theme';
 
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F3',
     paddingHorizontal: 20,
     fontFamily: FontFamily.interMedium,
+    ...(Platform.OS === 'android' ? { fontWeight: 'normal' as const, fontStyle: 'normal' as const } : null),
     fontSize: 16,
     letterSpacing: LetterSpacing.body,
     color: SproutlyColors.black,

@@ -36,20 +36,43 @@ export const Colors = {
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
+// Android resolves fonts by the useFonts map key / embedded file name (e.g. Inter_500Medium).
+// iOS uses the font file PostScript name (e.g. Inter-Medium). useFonts registers both on iOS.
 export const FontFamily = {
-  interMedium: 'Inter_500Medium',
-  interSemiBold: 'Inter_600SemiBold',
-  gabaritoMedium: 'Gabarito_500Medium',
-  gabaritoSemiBold: 'Gabarito_600SemiBold',
+  interMedium: Platform.select({
+    ios: 'Inter-Medium',
+    android: 'Inter_500Medium',
+    default: 'Inter_500Medium',
+  }) as string,
+  interMediumItalic: Platform.select({
+    ios: 'Inter-MediumItalic',
+    android: 'Inter_500Medium_Italic',
+    default: 'Inter_500Medium_Italic',
+  }) as string,
+  interSemiBold: Platform.select({
+    ios: 'Inter-SemiBold',
+    android: 'Inter_600SemiBold',
+    default: 'Inter_600SemiBold',
+  }) as string,
+  gabaritoMedium: Platform.select({
+    ios: 'Gabarito-Medium',
+    android: 'Gabarito_500Medium',
+    default: 'Gabarito_500Medium',
+  }) as string,
+  gabaritoSemiBold: Platform.select({
+    ios: 'Gabarito-SemiBold',
+    android: 'Gabarito_600SemiBold',
+    default: 'Gabarito_600SemiBold',
+  }) as string,
 } as const;
 
-// Android font rendering tends to look “squeezed” with negative letter-spacing.
-// Keep iOS/web design intent, but make Android spacing neutral.
+// Android needs slightly less negative tracking than iOS, but zero spacing
+// makes Inter look like the system font is being used.
 export const LetterSpacing =
   Platform.select({
     ios: { body: -0.5, headingSm: -1.5, headingLg: -3 } as const,
     web: { body: -0.5, headingSm: -1.5, headingLg: -3 } as const,
-    android: { body: 0, headingSm: 0, headingLg: 0 } as const,
+    android: { body: -0.35, headingSm: -1, headingLg: -2 } as const,
     default: { body: -0.5, headingSm: -1.5, headingLg: -3 } as const,
   }) ?? { body: -0.5, headingSm: -1.5, headingLg: -3 };
 

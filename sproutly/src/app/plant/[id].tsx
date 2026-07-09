@@ -566,9 +566,9 @@ const styles = StyleSheet.create({
     color: SproutlyColors.black,
   },
   species: {
-    fontFamily: FontFamily.interMedium,
+    fontFamily: FontFamily.interMediumItalic,
     fontSize: 14,
-    fontStyle: 'italic',
+    letterSpacing: LetterSpacing.body,
     color: SproutlyColors.textMuted,
   },
   titleActions: {

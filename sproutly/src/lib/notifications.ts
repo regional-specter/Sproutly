@@ -1,23 +1,58 @@
 import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
+import { isRunningInExpoGo } from 'expo';
 import { Platform } from 'react-native';
 
 import { getCareTaskLabel } from '@/lib/care-schedule';
 import { supabase } from '@/lib/supabase';
 import type { CareTask } from '@/types/database';
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+type NotificationsModule = typeof import('expo-notifications');
+
+let notificationsModule: NotificationsModule | null = null;
+let notificationsUnavailable = false;
+let handlerConfigured = false;
+
+function isExpoGoAndroid(): boolean {
+  return isRunningInExpoGo() && Platform.OS === 'android';
+}
+
+async function getNotifications(): Promise<NotificationsModule | null> {
+  if (notificationsUnavailable || isExpoGoAndroid()) {
+    return null;
+  }
+
+  if (!notificationsModule) {
+    try {
+      notificationsModule = await import('expo-notifications');
+
+      if (!handlerConfigured) {
+        notificationsModule.setNotificationHandler({
+          handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: true,
+            shouldSetBadge: true,
+            shouldShowBanner: true,
+            shouldShowList: true,
+          }),
+        });
+        handlerConfigured = true;
+      }
+    } catch {
+      notificationsUnavailable = true;
+      return null;
+    }
+  }
+
+  return notificationsModule;
+}
 
 export async function registerForPushNotifications(): Promise<string | null> {
-  if (!Device.isDevice) {
+  if (isExpoGoAndroid() || !Device.isDevice) {
+    return null;
+  }
+
+  const Notifications = await getNotifications();
+  if (!Notifications) {
     return null;
   }
 
@@ -45,13 +80,16 @@ export async function registerForPushNotifications(): Promise<string | null> {
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     return token;
   } catch {
-    // Expo Go and dev builds without a project ID cannot fetch push tokens.
-    // Local scheduled notifications still work without a token.
     return null;
   }
 }
 
 export async function scheduleCareTaskNotifications(tasks: CareTask[]): Promise<void> {
+  const Notifications = await getNotifications();
+  if (!Notifications) {
+    return;
+  }
+
   await Notifications.cancelAllScheduledNotificationsAsync();
 
   const now = Date.now();
@@ -79,6 +117,10 @@ export async function scheduleCareTaskNotifications(tasks: CareTask[]): Promise<
 }
 
 export async function syncCareNotifications(userId: string): Promise<void> {
+  if (isExpoGoAndroid()) {
+    return;
+  }
+
   try {
     const endOfWeek = new Date();
     endOfWeek.setDate(endOfWeek.getDate() + 7);
@@ -92,6 +134,12 @@ export async function syncCareNotifications(userId: string): Promise<void> {
       .order('due_at', { ascending: true });
 
     if (error) return;
+
+    const Notifications = await getNotifications();
+    if (!Notifications) {
+      return;
+    }
+
     if (!reminders?.length) {
       await Notifications.cancelAllScheduledNotificationsAsync();
       return;

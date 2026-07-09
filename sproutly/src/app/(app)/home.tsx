@@ -402,9 +402,8 @@ const styles = StyleSheet.create({
     color: SproutlyColors.black,
   },
   plantSpecies: {
-    fontFamily: FontFamily.interMedium,
+    fontFamily: FontFamily.interMediumItalic,
     fontSize: 12,
-    fontStyle: 'italic',
     letterSpacing: LetterSpacing.body,
     color: SproutlyColors.textMuted,
   },
